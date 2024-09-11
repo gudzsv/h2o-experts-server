@@ -23,6 +23,11 @@ export const ENV_VARS = {
     API_SECRET: 'CLOUDINARY_API_SECRET',
   },
 
+  GOOGLE: {
+    AUTH_CLIENT_ID: 'GOOGLE_AUTH_CLIENT_ID',
+    AUTH_CLIENT_SECRET: 'GOOGLE_AUTH_CLIENT_SECRET',
+  },
+
   JWT_SECRET: 'JWT_SECRET',
 
   APP_DOMAIN: 'APP_DOMAIN',
@@ -30,6 +35,8 @@ export const ENV_VARS = {
 
   SALT: 'SALT',
 };
+
+export const PATH_GOOGLE_JSON = path.join(process.cwd(), 'google-oauth.json');
 
 export const HTTP_STATUSES = {
   OK: 200,
