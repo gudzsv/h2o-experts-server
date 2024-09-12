@@ -1,5 +1,11 @@
 import createHttpError from 'http-errors';
-import { addWater, deleteWater, updateWater } from '../services/water.js';
+import {
+  addWater,
+  deleteWater,
+  getmonthWater,
+  getWaterByDate,
+  updateWater,
+} from '../services/water.js';
 import { HTTP_STATUSES } from '../constants/index.js';
 
 let STATUS_OK = HTTP_STATUSES.OK;
@@ -52,4 +58,39 @@ export const deleteWaterController = async (req, res, next) => {
   }
 
   res.status(STATUS_NO_CONTENT).send();
+};
+
+export const dateWaterController = async (req, res, next) => {
+  const { date } = req.params;
+  const userId = req.user._id;
+
+  const waterByDate = await getWaterByDate(userId, date);
+
+  if (!waterByDate) {
+    return next(createHttpError.NotFound(`Water not found by date ${date}`));
+  }
+
+  res.status(STATUS_OK).json({
+    status: STATUS_OK,
+    message: 'Water by date found successfully',
+    date: waterByDate,
+  });
+};
+
+export const monthWaterController = async (req, res, next) => {
+  const { yearMonth } = req.params;
+  const userId = req.user._id;
+
+  const waterByDateMonth = await getmonthWater(userId, yearMonth);
+  if (!waterByDateMonth) {
+    return next(
+      createHttpError.NotFound(`Water not found by month ${yearMonth}`),
+    );
+  }
+
+  res.status(STATUS_OK).json({
+    status: STATUS_OK,
+    message: 'Water by month found successfully',
+    date: waterByDateMonth,
+  });
 };
