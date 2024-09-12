@@ -32,8 +32,6 @@ export const ENV_VARS = {
 
   APP_DOMAIN: 'APP_DOMAIN',
   APP_PORT: 'APP_PORT',
-
-  SALT: 'SALT',
 };
 
 export const PATH_GOOGLE_JSON = path.join(process.cwd(), 'google-oauth.json');
@@ -64,6 +62,8 @@ export const JOI_VALIDATION_MSG = {
   PHONE_NUMBER: `'{{#label}}' must be a valid phone number. You provided: '{{#value}}'`,
   EMAIL: `'{{#label}}' must be a valid email address. You provided: '{{#value}}'`,
   TIME: `'{{#label}}' must be in the format YYYY-MM-DDTHH:mm:ss. You provided: '{{#value}}'`,
+  DATE: `'{{#label}}' format must be YYYY-MM-DD. You provided: '{{#value}}'`,
+  MONTH: `'{{#label}}' format must be YYYY-MM. You provided: '{{#value}}'`,
 };
 
 export const TEMP_UPLOAD_DIR = path.join(process.cwd(), 'temp');
@@ -94,7 +94,7 @@ export const COOKIES = {
 };
 
 export const JWT = {
-  EXPIRE_IN: '5m',
+  EXPIRE_IN: '15m',
 };
 
 export const VALIDATION_LENGTH = {

@@ -27,3 +27,27 @@ export const deleteWater = async (waterId, userId) => {
 
   return water;
 };
+
+export const getWaterByDate = async (userId, date) => {
+  const startOfDay = `${date}T00:00:00`;
+  const endOfDay = `${date}T23:59:59`;
+
+  const water = await WaterCollection.findOne({
+    userId,
+    drinkingTime: { $gte: startOfDay, $lte: endOfDay },
+  });
+
+  return water;
+};
+
+export const getmonthWater = async (userId, yearMonth) => {
+  const startOfMonth = `${yearMonth}-01T00:00:00`;
+  const endOfMonth = `${yearMonth}-31T23:59:59`;
+
+  const water = await WaterCollection.findOne({
+    userId,
+    drinkingTime: { $gte: startOfMonth, $lte: endOfMonth },
+  });
+
+  return water;
+};
