@@ -1,14 +1,7 @@
 import bcrypt from 'bcrypt';
-import { randomBytes } from 'crypto';
 import createHttpError from 'http-errors';
-// import jwt from 'jsonwebtoken';
-// import handlebars from 'handlebars';
-// import path from 'node:path';
-// import fs from 'node:fs/promises';
 
-// import { env } from '../utils/env.js';
-
-import { HTTP_STATUSES, TOKEN_PARAMS } from '../constants/index.js';
+import { HTTP_STATUSES, TOKEN_PARAMS, SALT } from '../constants/index.js';
 
 import { UserCollection } from '../db/models/users.js';
 import { SessionCollection } from '../db/models/sessions.js';
@@ -18,7 +11,7 @@ export const registerUser = async (payload) => {
 
   if (user) throw createHttpError(HTTP_STATUSES.CONFLICT, 'Email in use');
 
-  const encryptedPassword = await bcrypt.hash(payload.password, 10);
+  const encryptedPassword = await bcrypt.hash(payload.password, SALT);
 
   return await UserCollection.create({
     ...payload,
