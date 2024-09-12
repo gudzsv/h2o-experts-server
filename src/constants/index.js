@@ -63,6 +63,7 @@ export const JOI_VALIDATION_MSG = {
   BOOLEAN: `'{{#label}}' must be a boolean value. You provided: '{{#value}}'`,
   PHONE_NUMBER: `'{{#label}}' must be a valid phone number. You provided: '{{#value}}'`,
   EMAIL: `'{{#label}}' must be a valid email address. You provided: '{{#value}}'`,
+  TIME: `'{{#label}}' must be in the format YYYY-MM-DDTHH:mm:ss. You provided: '{{#value}}'`,
 };
 
 export const TEMP_UPLOAD_DIR = path.join(process.cwd(), 'temp');

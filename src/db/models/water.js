@@ -2,14 +2,15 @@ import { model, Schema } from 'mongoose';
 
 const waterSchema = new Schema(
   {
-    amountOfWater: {
+    usedWater: {
       type: Number,
       required: true,
+      default: 0,
     },
-    recordingTime: {
+    drinkingTime: {
       type: String,
-      default: Date.now,
       required: true,
+      default: () => new Date().toISOString().split('.')[0],
     },
     userId: { type: Schema.Types.ObjectId, required: true },
   },
@@ -19,4 +20,4 @@ const waterSchema = new Schema(
   },
 );
 
-export const ContactsCollection = model('contact', waterSchema);
+export const WaterCollection = model('water', waterSchema);
