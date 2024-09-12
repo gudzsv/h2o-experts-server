@@ -32,7 +32,7 @@ export const updateWaterController = async (req, res, next) => {
     return next(createHttpError.NotFound('Water not found'));
   }
 
-  const status = result?.isNew ? STATUS_CREATED : STATUS_OK;
+  const status = water?.isNew ? STATUS_CREATED : STATUS_OK;
 
   res.status(status).json({
     status: status,
