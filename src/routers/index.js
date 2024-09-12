@@ -7,6 +7,7 @@ import { authenticate } from '../middlewares/authenticate.js';
 const router = Router();
 
 router.use('/user', authRouter);
-router.use('/water', authenticate, waterRouter);
+// router.use('/water', authenticate, waterRouter);
+router.use('/water', waterRouter);
 
 export default router;
