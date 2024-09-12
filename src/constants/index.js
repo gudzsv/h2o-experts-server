@@ -74,6 +74,8 @@ export const EMAIL_TEMPLATE = {
 };
 export const RANDOM_BYTES = 30;
 
+export const SALT = 10;
+
 export const FIFTEEN_MINUTES = 15 * 60 * 1000;
 export const ONE_DAY = 24 * 60 * 60 * 1000;
 export const THIRTY_DAYS = 30 * ONE_DAY;
