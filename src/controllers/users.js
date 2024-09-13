@@ -1,8 +1,10 @@
+import createHttpError from 'http-errors';
 import {
   loginUser,
   logoutUser,
   refreshUsersSession,
   registerUser,
+  getUserById,
 } from '../services/users.js';
 
 import { TOKEN_PARAMS, COOKIES, HTTP_STATUSES } from '../constants/index.js';
@@ -24,7 +26,7 @@ const setupSession = (res, session) => {
   });
   res.cookie(COOKIES.SESSION_ID, session._id, {
     httpOnly: true,
-    expires: TOKEN_PARAMS.accessTokenValidUntil,
+    expires: TOKEN_PARAMS.refreshTokenValidUntil,
   });
 };
 
@@ -67,5 +69,19 @@ export const refreshUserSessionController = async (req, res) => {
     data: {
       accessToken: session.accessToken,
     },
+  });
+};
+
+export const getUserByIdController = async (req, res, next) => {
+  const { userId } = req.params;
+  const user = await getUserById(userId);
+
+  if (!user) {
+    next(createHttpError(HTTP_STATUSES.NOT_FOUND, 'Contact not found'));
+  }
+  res.status(HTTP_STATUSES.OK).json({
+    status: HTTP_STATUSES.OK,
+    message: `Successfully found contact with id ${userId}!`,
+    data: user,
   });
 };

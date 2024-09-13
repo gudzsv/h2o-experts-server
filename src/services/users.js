@@ -34,12 +34,12 @@ const createSession = () => {
 export const loginUser = async (payload) => {
   const user = await UserCollection.findOne({ email: payload.email });
   if (!user) {
-    throw createError(HTTP_STATUSES.NOT_FOUND, 'User not found.');
+    throw createHttpError(HTTP_STATUSES.NOT_FOUND, 'User not found.');
   }
   const isEqual = await bcrypt.compare(payload.password, user.password);
 
   if (!isEqual) {
-    throw createError(HTTP_STATUSES.UNAUTHORIZED, 'Unauthorized user.');
+    throw createHttpError(HTTP_STATUSES.UNAUTHORIZED, 'Unauthorized user.');
   }
 
   await SessionCollection.deleteOne({ userId: user._id });
@@ -63,14 +63,14 @@ export const refreshUsersSession = async ({ sessionId, refreshToken }) => {
   });
 
   if (!session) {
-    throw createError(HTTP_STATUSES.UNAUTHORIZED, 'Session not found');
+    throw createHttpError(HTTP_STATUSES.UNAUTHORIZED, 'Session not found');
   }
 
   const isSessionTokenExpired =
     new Date() > new Date(session.refreshTokenValidUntil);
 
   if (isSessionTokenExpired) {
-    throw createError(HTTP_STATUSES.UNAUTHORIZED, 'Session token expired');
+    throw createHttpError(HTTP_STATUSES.UNAUTHORIZED, 'Session token expired');
   }
 
   const newSession = createSession();
@@ -81,4 +81,9 @@ export const refreshUsersSession = async ({ sessionId, refreshToken }) => {
     userId: session.userId,
     ...newSession,
   });
+};
+
+export const getUserById = async (userId) => {
+  const user = await UserCollection.findById(userId);
+  return user;
 };
