@@ -5,10 +5,11 @@ import {
   refreshUsersSession,
   registerUser,
   getUserById,
+  updateUser,
 } from '../services/users.js';
 
 import { TOKEN_PARAMS, COOKIES, HTTP_STATUSES } from '../constants/index.js';
-
+import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 export const registerUserController = async (req, res) => {
   const user = await registerUser(req.body);
 
@@ -83,5 +84,29 @@ export const getUserByIdController = async (req, res, next) => {
     status: HTTP_STATUSES.OK,
     message: `Successfully found contact with id ${userId}!`,
     data: user,
+  });
+};
+
+export const patchUserController = async (req, res, next) => {
+  const { userId } = req.params;
+  const photo = req.file;
+  let photoUrl;
+  if (photo) {
+    photoUrl = await saveFileToCloudinary(photo);
+  }
+
+  const result = await updateUser(userId, {
+    ...req.body,
+    photo: photoUrl,
+  });
+
+  if (!result) {
+    next(createHttpError(HTTP_STATUSES.NOT_FOUND, 'User not found'));
+    return;
+  }
+  res.json({
+    status: HTTP_STATUSES.OK,
+    message: 'Successfully patched a user!',
+    data: result.user,
   });
 };
