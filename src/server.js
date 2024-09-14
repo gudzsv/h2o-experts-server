@@ -10,7 +10,8 @@ import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 import router from './routers/index.js';
 import cookieParser from 'cookie-parser';
-// import { swaggerDocs } from './middlewares/swaggerDocs.js';
+import { swaggerDocs } from './middlewares/swaggerDocs.js';
+import { UPLOAD_DIR } from './constants/index.js';
 
 const PORT = Number(env(ENV_VARS.APP_PORT, 3000));
 
@@ -25,7 +26,9 @@ export const setupServer = () => {
 
   app.use(bodyParser.urlencoded({ extended: true }));
 
-  // app.use('/api-docs', swaggerDocs());
+  app.use('/uploads', express.static(UPLOAD_DIR));
+
+  app.use('/api-docs', swaggerDocs());
 
   app.use(router);
 

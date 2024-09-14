@@ -1,0 +1,161 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "AquaTrack",
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "description": "This is a documentation of students app"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    },
+    {
+      "url": "https://h2o-experts-server.onrender.com"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Students",
+      "description": "Operations about users."
+    },
+    {
+      "name": "Auth",
+      "description": "Auth operations."
+    }
+  ],
+  "paths": {
+    "/users/register": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Register a new user",
+        "operationId": "registerUser",
+        "description": "Register a new user with the provided information",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "User's email address",
+                    "example": "user@example.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "format": "password",
+                    "description": "User's password",
+                    "example": "password123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User registered successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["status", "message", "data"],
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user": {
+                          "$ref": "#/components/schemas/user"
+                        },
+                        "accessToken": {
+                          "type": "string",
+                          "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Email in use"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    },
+    "schemas": {
+      "user": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "_id": {
+            "description": "User's id",
+            "type": "string",
+            "example": "669ba5cc4b0321e6c93ae9e0"
+          },
+          "name": {
+            "description": "User's name",
+            "type": "string",
+            "example": "Testman"
+          },
+          "email": {
+            "description": "User's email",
+            "type": "string",
+            "example": "test@swagger.com"
+          },
+          "password": {
+            "description": "User's password",
+            "type": "string",
+            "example": "121232"
+          },
+          "weight": {
+            "description": "User's weight in kilograms",
+            "type": "number",
+            "example": 56
+          },
+          "activityLevel": {
+            "description": "User's activity level (e.g., 1 = sedentary, 2 = lightly active, 3 = moderately active, 4 = very active)",
+            "type": "number",
+            "example": 2
+          },
+          "gender": {
+            "description": "User's gender",
+            "type": "string",
+            "default": "female",
+            "example": "female"
+          },
+          "dailyRequirement": {
+            "type": "number",
+            "description": "User's daily rate of water",
+            "default": 2000
+          },
+          "photo": {
+            "description": "User's photo",
+            "type": "string",
+            "example": "https://m.media-amazon.com/images/S/pv-target-images/16627900db04b76fae3b64266ca161511422059cd24062fb5d900971003a0b70.jpg"
+          }
+        }
+      }
+    }
+  }
+}
