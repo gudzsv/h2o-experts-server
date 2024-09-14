@@ -1,5 +1,6 @@
 import createHttpError from 'http-errors';
 import {
+  countUsers,
   loginUser,
   logoutUser,
   refreshUsersSession,
@@ -10,6 +11,20 @@ import {
 
 import { TOKEN_PARAMS, COOKIES, HTTP_STATUSES } from '../constants/index.js';
 import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
+import { UserCollection } from '../db/models/users.js';
+
+export const countUsersController = async (req, res) => {
+  const usersCount = await countUsers();
+
+  res.status(HTTP_STATUSES.OK).json({
+    status: HTTP_STATUSES.OK,
+    message: 'Successfully found count users!',
+    data: {
+      usersCount,
+    },
+  });
+};
+
 export const registerUserController = async (req, res) => {
   const user = await registerUser(req.body);
 

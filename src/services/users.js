@@ -6,6 +6,10 @@ import { HTTP_STATUSES, TOKEN_PARAMS, SALT } from '../constants/index.js';
 import { UserCollection } from '../db/models/users.js';
 import { SessionCollection } from '../db/models/sessions.js';
 
+export const countUsers = async () => {
+  return UserCollection.countDocuments();
+};
+
 export const registerUser = async (payload) => {
   const user = await UserCollection.findOne({ email: payload.email });
 

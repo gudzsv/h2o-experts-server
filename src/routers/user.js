@@ -8,6 +8,7 @@ import { upload } from '../middlewares/multer.js';
 
 import { userSchema, updateUserSchema } from '../validation/users.js';
 import {
+  countUsersController,
   loginUserController,
   logoutUserController,
   refreshUserSessionController,
@@ -18,6 +19,8 @@ import {
 
 const router = Router();
 const jsonParser = json();
+
+router.get('/count', ctrlWrapper(countUsersController));
 
 router.post(
   '/register',
