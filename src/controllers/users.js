@@ -74,7 +74,7 @@ export const refreshUserSessionController = async (req, res) => {
 };
 
 export const getUserByIdController = async (req, res, next) => {
-  const { userId } = req.params;
+  const userId = req.user._id;
   const user = await getUserById(userId);
 
   if (!user) {
@@ -88,7 +88,7 @@ export const getUserByIdController = async (req, res, next) => {
 };
 
 export const patchUserController = async (req, res, next) => {
-  const { userId } = req.params;
+  const userId = req.user._id;
   const photo = req.file;
   let photoUrl;
   if (photo) {

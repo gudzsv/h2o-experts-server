@@ -39,11 +39,10 @@ router.post('/logout', ctrlWrapper(logoutUserController));
 
 router.use(authenticate);
 
-router.get('/:userId', isValidId('userId'), ctrlWrapper(getUserByIdController));
+router.get('/', ctrlWrapper(getUserByIdController));
 
 router.patch(
-  '/:userId',
-  isValidId('userId'),
+  '/',
   upload.single('photo'),
   validateBody(updateUserSchema),
   ctrlWrapper(patchUserController),
