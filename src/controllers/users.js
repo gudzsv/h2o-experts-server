@@ -11,7 +11,6 @@ import {
 
 import { TOKEN_PARAMS, COOKIES, HTTP_STATUSES } from '../constants/index.js';
 import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
-import { UserCollection } from '../db/models/users.js';
 
 export const countUsersController = async (req, res) => {
   const usersCount = await countUsers();
@@ -93,7 +92,7 @@ export const getUserByIdController = async (req, res, next) => {
   const user = await getUserById(userId);
 
   if (!user) {
-    next(createHttpError(HTTP_STATUSES.NOT_FOUND, 'Contact not found'));
+    next(createHttpError.NotFound('Contact not found'));
   }
   res.status(HTTP_STATUSES.OK).json({
     status: HTTP_STATUSES.OK,
@@ -116,7 +115,7 @@ export const patchUserController = async (req, res, next) => {
   });
 
   if (!result) {
-    next(createHttpError(HTTP_STATUSES.NOT_FOUND, 'User not found'));
+    next(createHttpError.NotFound('User not found'));
     return;
   }
   res.json({
