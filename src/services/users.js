@@ -6,10 +6,14 @@ import { HTTP_STATUSES, TOKEN_PARAMS, SALT } from '../constants/index.js';
 import { UserCollection } from '../db/models/users.js';
 import { SessionCollection } from '../db/models/sessions.js';
 
+export const countUsers = async () => {
+  return UserCollection.countDocuments();
+};
+
 export const registerUser = async (payload) => {
   const user = await UserCollection.findOne({ email: payload.email });
 
-  if (user) throw createHttpError(HTTP_STATUSES.CONFLICT, 'Email in use');
+  if (user) throw createHttpError.Conflict('Email in use');
 
   const encryptedPassword = await bcrypt.hash(payload.password, SALT);
 
@@ -34,12 +38,12 @@ const createSession = () => {
 export const loginUser = async (payload) => {
   const user = await UserCollection.findOne({ email: payload.email });
   if (!user) {
-    throw createHttpError(HTTP_STATUSES.NOT_FOUND, 'User not found.');
+    throw createHttpError.NotFound('User not found.');
   }
   const isEqual = await bcrypt.compare(payload.password, user.password);
 
   if (!isEqual) {
-    throw createHttpError(HTTP_STATUSES.UNAUTHORIZED, 'Unauthorized user.');
+    throw createHttpError.Unauthorized('Unauthorized user.');
   }
 
   await SessionCollection.deleteOne({ userId: user._id });
@@ -63,14 +67,14 @@ export const refreshUsersSession = async ({ sessionId, refreshToken }) => {
   });
 
   if (!session) {
-    throw createHttpError(HTTP_STATUSES.UNAUTHORIZED, 'Session not found');
+    throw createHttpError.Unauthorized('Session not found');
   }
 
   const isSessionTokenExpired =
     new Date() > new Date(session.refreshTokenValidUntil);
 
   if (isSessionTokenExpired) {
-    throw createHttpError(HTTP_STATUSES.UNAUTHORIZED, 'Session token expired');
+    throw createHttpError.Unauthorized('Session token expired');
   }
 
   const newSession = createSession();

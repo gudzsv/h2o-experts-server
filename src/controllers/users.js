@@ -1,5 +1,6 @@
 import createHttpError from 'http-errors';
 import {
+  countUsers,
   loginUser,
   logoutUser,
   refreshUsersSession,
@@ -10,6 +11,19 @@ import {
 
 import { TOKEN_PARAMS, COOKIES, HTTP_STATUSES } from '../constants/index.js';
 import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
+
+export const countUsersController = async (req, res) => {
+  const usersCount = await countUsers();
+
+  res.status(HTTP_STATUSES.OK).json({
+    status: HTTP_STATUSES.OK,
+    message: 'Successfully found count users!',
+    data: {
+      usersCount,
+    },
+  });
+};
+
 export const registerUserController = async (req, res) => {
   const user = await registerUser(req.body);
 
@@ -74,11 +88,11 @@ export const refreshUserSessionController = async (req, res) => {
 };
 
 export const getUserByIdController = async (req, res, next) => {
-  const { userId } = req.params;
+  const userId = req.user._id;
   const user = await getUserById(userId);
 
   if (!user) {
-    next(createHttpError(HTTP_STATUSES.NOT_FOUND, 'Contact not found'));
+    next(createHttpError.NotFound('Contact not found'));
   }
   res.status(HTTP_STATUSES.OK).json({
     status: HTTP_STATUSES.OK,
@@ -88,7 +102,7 @@ export const getUserByIdController = async (req, res, next) => {
 };
 
 export const patchUserController = async (req, res, next) => {
-  const { userId } = req.params;
+  const userId = req.user._id;
   const photo = req.file;
   let photoUrl;
   if (photo) {
@@ -101,7 +115,7 @@ export const patchUserController = async (req, res, next) => {
   });
 
   if (!result) {
-    next(createHttpError(HTTP_STATUSES.NOT_FOUND, 'User not found'));
+    next(createHttpError.NotFound('User not found'));
     return;
   }
   res.json({
