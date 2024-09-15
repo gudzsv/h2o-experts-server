@@ -6,7 +6,11 @@ import { authenticate } from '../middlewares/authenticate.js';
 import { isValidId } from '../middlewares/isValidId.js';
 import { upload } from '../middlewares/multer.js';
 
-import { userSchema, updateUserSchema } from '../validation/users.js';
+import {
+  userSchema,
+  updateUserSchema,
+  loginWithGoogleOAuthSchema,
+} from '../validation/users.js';
 import {
   countUsersController,
   loginUserController,
@@ -15,6 +19,8 @@ import {
   registerUserController,
   getUserByIdController,
   patchUserController,
+  getGoogleOAuthUrlController,
+  loginWithGoogleController,
 } from '../controllers/users.js';
 
 const router = Router();
@@ -49,6 +55,16 @@ router.patch(
   upload.single('photo'),
   validateBody(updateUserSchema),
   ctrlWrapper(patchUserController),
+);
+
+// google oauth
+
+router.get('/get-oauth-url', ctrlWrapper(getGoogleOAuthUrlController));
+
+router.post(
+  '/confirm-oauth',
+  validateBody(loginWithGoogleOAuthSchema),
+  ctrlWrapper(loginWithGoogleController),
 );
 
 export default router;

@@ -13,3 +13,9 @@ export const updateUserSchema = Joi.object({
   gender: Joi.string().valid('male', 'female'),
   dailyRequirement: Joi.number().integer(),
 });
+
+// Google oAuth2
+
+export const loginWithGoogleOAuthSchema = Joi.object({
+  code: Joi.string().required(),
+});
