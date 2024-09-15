@@ -12,4 +12,4 @@ content:
           example: 400
         message:
           type: string
-          example: Bad request
+          example: Bad request, url parameters are incorrect
