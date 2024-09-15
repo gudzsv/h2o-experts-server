@@ -2,6 +2,7 @@ type: object
 required:
   - email
   - password
+  - name
 properties:
   _id:
     description: "User's id"
@@ -10,7 +11,7 @@ properties:
   name:
     description: "User's name"
     type: string
-    example: 'Testman'
+    example: 'User'
   email:
     description: "User's email"
     type: string
@@ -39,4 +40,4 @@ properties:
   photo:
     description: "User's photo"
     type: string
-    example: 'https://m.media-amazon.com/images/S/pv-target-images/16627900db04b76fae3b64266ca161511422059cd24062fb5d900971003a0b70.jpg'
+    example: 'https://ecosoft-market.com.ua/image/cache/catalog/blog/znachenie-vody-v-prirode-i-zhizni-cheloveka-ee-poleznye-svoystva-850x450.jpg'
