@@ -1,11 +1,13 @@
 import bcrypt from 'bcrypt';
+import { randomBytes } from 'crypto';
 import createHttpError from 'http-errors';
 
-import { HTTP_STATUSES, TOKEN_PARAMS, SALT } from '../constants/index.js';
 import {
   getFullNameFromGoogleTokenPayload,
   validateCode,
 } from '../utils/googleOAuth2.js';
+
+import { RANDOM_BYTES, TOKEN_PARAMS, SALT } from '../constants/index.js';
 import { UserCollection } from '../db/models/users.js';
 import { SessionCollection } from '../db/models/sessions.js';
 
@@ -27,8 +29,8 @@ export const registerUser = async (payload) => {
 };
 
 const createSession = () => {
-  const accessToken = TOKEN_PARAMS.accessToken;
-  const refreshToken = TOKEN_PARAMS.refreshToken;
+  const accessToken = randomBytes(RANDOM_BYTES).toString('base64');
+  const refreshToken = randomBytes(RANDOM_BYTES).toString('base64');
 
   return {
     accessToken,
@@ -114,11 +116,11 @@ export const updateUser = async (userId, payload) => {
 export const loginOrSignupWithGoogle = async (code) => {
   const loginTicket = await validateCode(code);
   const payload = loginTicket.getPayload();
-  if (!payload) throw createHttpError(401);
+  if (!payload) throw createHttpError.Unauthorized('Unauthorized user'');
 
   let user = await UsersCollection.findOne({ email: payload.email });
   if (!user) {
-    const password = await bcrypt.hash(randomBytes(10), 10);
+    const password = await bcrypt.hash(randomBytes(RANDOM_BYTES), SALT);
     user = await UsersCollection.create({
       email: payload.email,
       name: getFullNameFromGoogleTokenPayload(payload),

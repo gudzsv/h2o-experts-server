@@ -94,7 +94,7 @@ export const COOKIES = {
 };
 
 export const JWT = {
-  EXPIRE_IN: '15m',
+  EXPIRE_IN: '1d',
 };
 
 export const VALIDATION_LENGTH = {
