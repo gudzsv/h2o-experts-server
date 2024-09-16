@@ -5,7 +5,7 @@ import { env } from './env.js';
 import createHttpError from 'http-errors';
 import { ENV_VARS, PATH_GOOGLE_JSON } from '../constants/index.js';
 
-const [AUTH_CLIENT_ID, AUTH_CLIENT_SECRET] = ENV_VARS.GOOGLE;
+const { AUTH_CLIENT_ID, AUTH_CLIENT_SECRET } = ENV_VARS.GOOGLE;
 
 const oauthConfig = JSON.parse(await readFile(PATH_GOOGLE_JSON));
 
