@@ -1,7 +1,8 @@
 import bcrypt from 'bcrypt';
+import { randomBytes } from 'crypto';
 import createHttpError from 'http-errors';
 
-import { HTTP_STATUSES, TOKEN_PARAMS, SALT } from '../constants/index.js';
+import { RANDOM_BYTES, TOKEN_PARAMS, SALT } from '../constants/index.js';
 
 import { UserCollection } from '../db/models/users.js';
 import { SessionCollection } from '../db/models/sessions.js';
@@ -24,8 +25,8 @@ export const registerUser = async (payload) => {
 };
 
 const createSession = () => {
-  const accessToken = TOKEN_PARAMS.accessToken;
-  const refreshToken = TOKEN_PARAMS.refreshToken;
+  const accessToken = randomBytes(RANDOM_BYTES).toString('base64');
+  const refreshToken = randomBytes(RANDOM_BYTES).toString('base64');
 
   return {
     accessToken,
