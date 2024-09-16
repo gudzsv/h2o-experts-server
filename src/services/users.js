@@ -111,12 +111,10 @@ export const updateUser = async (userId, payload) => {
   };
 };
 
-// Gooogle OAuth2
-
 export const loginOrSignupWithGoogle = async (code) => {
   const loginTicket = await validateCode(code);
   const payload = loginTicket.getPayload();
-  if (!payload) throw createHttpError.Unauthorized('Unauthorized user'');
+  if (!payload) throw createHttpError.Unauthorized('Unauthorized user');
 
   let user = await UsersCollection.findOne({ email: payload.email });
   if (!user) {
