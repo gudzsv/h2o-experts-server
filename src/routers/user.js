@@ -70,6 +70,7 @@ router.patch(
 
 router.post(
   '/send-reset-email',
+  jsonParser,
   validateBody(sendResetEmailSchema),
   ctrlWrapper(sendResetEmailController),
 );

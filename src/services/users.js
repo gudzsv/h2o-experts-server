@@ -2,14 +2,26 @@ import bcrypt from 'bcrypt';
 import { randomBytes } from 'crypto';
 import createHttpError from 'http-errors';
 import jwt from 'jsonwebtoken';
+import { env } from '../utils/env.js';
+import path from 'node:path';
+import fs from 'node:fs/promises';
+import handlebars from 'handlebars';
 
-import { RANDOM_BYTES, TOKEN_PARAMS, SALT, JWT } from '../constants/index.js';
+import {
+  RANDOM_BYTES,
+  TOKEN_PARAMS,
+  SALT,
+  JWT,
+  ENV_VARS,
+  EMAIL_TEMPLATE,
+} from '../constants/index.js';
+
 import {
   getFullNameFromGoogleTokenPayload,
   validateCode,
 } from '../utils/googleOAuth2.js';
+import { sendEmail } from '../utils/sendEmail.js';
 
-import { RANDOM_BYTES, TOKEN_PARAMS, SALT } from '../constants/index.js';
 import { UserCollection } from '../db/models/users.js';
 import { SessionCollection } from '../db/models/sessions.js';
 
@@ -123,15 +135,15 @@ export const sendResetToken = async (email) => {
       sub: user._id,
       email,
     },
-    process.env.JWT_SECRET,
+    env(ENV_VARS.JWT_SECRET),
     {
       expiresIn: JWT.EXPIRE_IN,
     },
   );
 
   const resetPasswordTemplatePath = path.join(
-    TEMPLATES_DIR,
-    'reset-password-email.html',
+    EMAIL_TEMPLATE.TEMPLATES_DIR,
+    EMAIL_TEMPLATE.TEMPLATE_FILE_NAME,
   );
 
   const templateSource = (
@@ -141,17 +153,19 @@ export const sendResetToken = async (email) => {
   const template = handlebars.compile(templateSource);
   const html = template({
     name: user.name,
-    link: `${env('APP_DOMAIN')}/reset-password?token=${resetToken}`,
+    link: `${env(ENV_VARS.APP_DOMAIN)}/reset-password?token=${resetToken}`,
   });
   try {
     await sendEmail({
-      from: SMTP.SMTP_FROM,
+      from: env(ENV_VARS.BREVO.SMTP_FROM),
       to: email,
       subject: 'Reset your password',
       html,
     });
   } catch {
-    throw createError(500, 'Failed to send the email, please try again later.');
+    throw createHttpError.InternalServerError(
+      'Failed to send the email, please try again later.',
+    );
   }
 };
 
