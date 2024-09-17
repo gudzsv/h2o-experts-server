@@ -56,9 +56,11 @@ const createSession = () => {
 
 export const loginUser = async (payload) => {
   const user = await UserCollection.findOne({ email: payload.email });
+
   if (!user) {
     throw createHttpError.NotFound('User not found.');
   }
+
   const isEqual = await bcrypt.compare(payload.password, user.password);
 
   if (!isEqual) {
@@ -127,9 +129,11 @@ export const updateUser = async (userId, payload) => {
 
 export const sendResetToken = async (email) => {
   const user = await UserCollection.findOne({ email });
+
   if (!user) {
     throw createHttpError.NotFound('User not found');
   }
+
   const resetToken = jwt.sign(
     {
       sub: user._id,
@@ -201,6 +205,7 @@ export const resetPassword = async (payload) => {
 export const loginOrSignupWithGoogle = async (code) => {
   const loginTicket = await validateCode(code);
   const payload = loginTicket.getPayload();
+
   if (!payload) throw createHttpError.Unauthorized('Unauthorized user');
 
   let user = await UserCollection.findOne({ email: payload.email });
