@@ -98,6 +98,7 @@ export const getUserByIdController = async (req, res, next) => {
   if (!user) {
     next(createHttpError.NotFound('Contact not found'));
   }
+
   res.status(HTTP_STATUSES.OK).json({
     status: HTTP_STATUSES.OK,
     message: `Successfully found contact with id ${userId}!`,
@@ -109,6 +110,7 @@ export const patchUserController = async (req, res, next) => {
   const userId = req.user._id;
   const photo = req.file;
   let photoUrl;
+
   if (photo) {
     photoUrl = await saveFileToCloudinary(photo);
   }
@@ -122,6 +124,7 @@ export const patchUserController = async (req, res, next) => {
     next(createHttpError.NotFound('User not found'));
     return;
   }
+
   res.json({
     status: HTTP_STATUSES.OK,
     message: 'Successfully patched a user!',
@@ -131,6 +134,7 @@ export const patchUserController = async (req, res, next) => {
 
 export const sendResetEmailController = async (req, res) => {
   await sendResetToken(req.body.email);
+
   res.json({
     status: HTTP_STATUSES.OK,
     message: 'Reset password email has been successfully sent.',
@@ -140,6 +144,7 @@ export const sendResetEmailController = async (req, res) => {
 
 export const resetPasswordController = async (req, res) => {
   await resetPassword(req.body);
+
   res.json({
     status: HTTP_STATUSES.OK,
     message: 'Password has been successfully reset.',
@@ -147,10 +152,9 @@ export const resetPasswordController = async (req, res) => {
   });
 };
 
-// Gooogle oAuth2
-
 export const getGoogleOAuthUrlController = async (req, res) => {
   const url = generateAuthUrl();
+
   res.json({
     status: 200,
     message: 'Successfully get Google OAuth url!',
@@ -162,6 +166,7 @@ export const getGoogleOAuthUrlController = async (req, res) => {
 
 export const loginWithGoogleController = async (req, res) => {
   const session = await loginOrSignupWithGoogle(req.body.code);
+
   setupSession(res, session);
 
   res.json({

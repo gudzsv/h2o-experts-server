@@ -3,7 +3,6 @@ import { json, Router } from 'express';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import { validateBody } from '../middlewares/validateBody.js';
 import { authenticate } from '../middlewares/authenticate.js';
-import { isValidId } from '../middlewares/isValidId.js';
 import { upload } from '../middlewares/multer.js';
 
 import {
@@ -57,6 +56,7 @@ router.post(
   validateBody(loginWithGoogleOAuthSchema),
   ctrlWrapper(loginWithGoogleController),
 );
+
 router.use(authenticate);
 
 router.get('/', ctrlWrapper(getUserByIdController));
@@ -81,7 +81,5 @@ router.post(
   validateBody(resetPasswordSchema),
   ctrlWrapper(resetPasswordController),
 );
-
-// google oauth
 
 export default router;
