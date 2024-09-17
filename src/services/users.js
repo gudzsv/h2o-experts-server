@@ -203,10 +203,10 @@ export const loginOrSignupWithGoogle = async (code) => {
   const payload = loginTicket.getPayload();
   if (!payload) throw createHttpError.Unauthorized('Unauthorized user');
 
-  let user = await UsersCollection.findOne({ email: payload.email });
+  let user = await UserCollection.findOne({ email: payload.email });
   if (!user) {
     const password = await bcrypt.hash(randomBytes(RANDOM_BYTES), SALT);
-    user = await UsersCollection.create({
+    user = await UserCollection.create({
       email: payload.email,
       name: getFullNameFromGoogleTokenPayload(payload),
       password,
@@ -215,7 +215,7 @@ export const loginOrSignupWithGoogle = async (code) => {
 
   const newSession = createSession();
 
-  return await SessionsCollection.create({
+  return await SessionCollection.create({
     userId: user._id,
     ...newSession,
   });

@@ -7,6 +7,7 @@ export const validateBody = (schema) => async (req, res, next) => {
 
     next();
   } catch (error) {
+    console.log(req, 'Validate Body');
     const errorMessages = error.details
       .map((detail) => detail.message.replace(/"/g, ''))
       .join('; ');
@@ -18,7 +19,6 @@ export const validateBody = (schema) => async (req, res, next) => {
         errors: errorMessages,
       },
     );
-
 
     next(httpError);
   }
