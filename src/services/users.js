@@ -1,13 +1,27 @@
 import bcrypt from 'bcrypt';
 import { randomBytes } from 'crypto';
 import createHttpError from 'http-errors';
+import jwt from 'jsonwebtoken';
+import { env } from '../utils/env.js';
+import path from 'node:path';
+import fs from 'node:fs/promises';
+import handlebars from 'handlebars';
+
+import {
+  RANDOM_BYTES,
+  TOKEN_PARAMS,
+  SALT,
+  JWT,
+  ENV_VARS,
+  EMAIL_TEMPLATE,
+} from '../constants/index.js';
 
 import {
   getFullNameFromGoogleTokenPayload,
   validateCode,
 } from '../utils/googleOAuth2.js';
+import { sendEmail } from '../utils/sendEmail.js';
 
-import { RANDOM_BYTES, TOKEN_PARAMS, SALT } from '../constants/index.js';
 import { UserCollection } from '../db/models/users.js';
 import { SessionCollection } from '../db/models/sessions.js';
 
@@ -109,6 +123,79 @@ export const updateUser = async (userId, payload) => {
     user: rawResult.value,
     isNew: Boolean(rawResult?.lastErrorObject?.upserted),
   };
+};
+
+export const sendResetToken = async (email) => {
+  const user = await UserCollection.findOne({ email });
+  if (!user) {
+    throw createHttpError.NotFound('User not found');
+  }
+  const resetToken = jwt.sign(
+    {
+      sub: user._id,
+      email,
+    },
+    env(ENV_VARS.JWT_SECRET),
+    {
+      expiresIn: JWT.EXPIRE_IN,
+    },
+  );
+
+  const resetPasswordTemplatePath = path.join(
+    EMAIL_TEMPLATE.TEMPLATES_DIR,
+    EMAIL_TEMPLATE.TEMPLATE_FILE_NAME,
+  );
+
+  const templateSource = (
+    await fs.readFile(resetPasswordTemplatePath)
+  ).toString();
+
+  const template = handlebars.compile(templateSource);
+  const html = template({
+    name: user.name,
+    link: `${env(ENV_VARS.APP_DOMAIN)}/reset-password?token=${resetToken}`,
+  });
+  try {
+    await sendEmail({
+      from: env(ENV_VARS.BREVO.SMTP_FROM),
+      to: email,
+      subject: 'Reset your password',
+      html,
+    });
+  } catch {
+    throw createHttpError.InternalServerError(
+      'Failed to send the email, please try again later.',
+    );
+  }
+};
+
+export const resetPassword = async (payload) => {
+  let entries;
+
+  try {
+    entries = jwt.verify(payload.token, env(ENV_VARS.JWT_SECRET));
+  } catch (err) {
+    if (err instanceof Error)
+      throw createHttpError.Unauthorized('Token is expired or invalid.');
+    throw err;
+  }
+
+  const user = await UserCollection.findOne({
+    email: entries.email,
+    _id: entries.sub,
+  });
+
+  if (!user) {
+    throw createHttpError.NotFound('User not found');
+  }
+
+  const encryptedPassword = await bcrypt.hash(payload.password, SALT);
+
+  await UserCollection.updateOne(
+    { _id: user._id },
+    { password: encryptedPassword },
+  );
+  await SessionCollection.deleteOne({ userId: user._id });
 };
 
 export const loginOrSignupWithGoogle = async (code) => {

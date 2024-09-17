@@ -7,6 +7,8 @@ import {
   registerUser,
   getUserById,
   updateUser,
+  sendResetToken,
+  resetPassword,
   loginOrSignupWithGoogle,
 } from '../services/users.js';
 
@@ -124,6 +126,24 @@ export const patchUserController = async (req, res, next) => {
     status: HTTP_STATUSES.OK,
     message: 'Successfully patched a user!',
     data: result.user,
+  });
+};
+
+export const sendResetEmailController = async (req, res) => {
+  await sendResetToken(req.body.email);
+  res.json({
+    status: HTTP_STATUSES.OK,
+    message: 'Reset password email has been successfully sent.',
+    data: {},
+  });
+};
+
+export const resetPasswordController = async (req, res) => {
+  await resetPassword(req.body);
+  res.json({
+    status: HTTP_STATUSES.OK,
+    message: 'Password has been successfully reset.',
+    data: {},
   });
 };
 
