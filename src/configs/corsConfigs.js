@@ -3,6 +3,7 @@ export const corsConfigs = {
     const allowedOrigins = [
       'http://localhost:5173',
       'http://localhost:3000',
+      'http://localhost:4173',
       'https://h2o-experts-app.vercel.app',
       'https://h2o-experts-server.onrender.com',
     ];
