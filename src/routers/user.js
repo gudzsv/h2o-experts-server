@@ -11,6 +11,7 @@ import {
   updateUserSchema,
   sendResetEmailSchema,
   resetPasswordSchema,
+  loginWithGoogleOAuthSchema,
 } from '../validation/users.js';
 import {
   countUsersController,
@@ -22,6 +23,8 @@ import {
   patchUserController,
   sendResetEmailController,
   resetPasswordController,
+  getGoogleOAuthUrlController,
+  loginWithGoogleController,
 } from '../controllers/users.js';
 
 const router = Router();
@@ -47,6 +50,13 @@ router.post('/refresh', ctrlWrapper(refreshUserSessionController));
 
 router.post('/logout', ctrlWrapper(logoutUserController));
 
+router.get('/get-oauth-url', ctrlWrapper(getGoogleOAuthUrlController));
+
+router.post(
+  '/confirm-oauth',
+  validateBody(loginWithGoogleOAuthSchema),
+  ctrlWrapper(loginWithGoogleController),
+);
 router.use(authenticate);
 
 router.get('/', ctrlWrapper(getUserByIdController));
@@ -69,5 +79,7 @@ router.post(
   validateBody(resetPasswordSchema),
   ctrlWrapper(resetPasswordController),
 );
+
+// google oauth
 
 export default router;

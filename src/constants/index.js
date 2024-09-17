@@ -94,7 +94,7 @@ export const COOKIES = {
 };
 
 export const JWT = {
-  EXPIRE_IN: '15m',
+  EXPIRE_IN: '1d',
 };
 
 export const VALIDATION_LENGTH = {
@@ -106,3 +106,4 @@ export const EMAIL_VALIDATION_LENGTH = {
   MIN_LENGTH: 3,
   MAX_LENGTH: 50,
 };
+export const SWAGGER_PATH = path.join(process.cwd(), 'docs', 'swagger.json');

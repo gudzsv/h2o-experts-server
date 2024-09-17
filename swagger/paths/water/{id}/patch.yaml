@@ -1,0 +1,49 @@
+tags:
+  - Water
+summary: Update water volume by id
+operationId: patchWater
+description: 'Update water volume by id'
+security:
+  - bearerAuth: []
+parameters:
+  - in: path
+    name: id
+    required: true
+    schema:
+      type: string
+      example: '669ba5f44b0321e6c93ae9f3'
+requestBody:
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          volume:
+            description: 'Water volume'
+            type: number
+            example: 60
+responses:
+  '200':
+    description: 'Water successfully updated'
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: 'Water successfully updated'
+            data:
+              type: object
+              $ref: '../../../components/schemas/water.yaml'
+  '401':
+    $ref: '../../../components/responses/401.yaml'
+  '404':
+    $ref: '../../../components/responses/404.yaml'

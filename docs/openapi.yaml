@@ -1,0 +1,64 @@
+openapi: 3.1.0
+info:
+  version: 1.0.0
+  title: AquaTrack-h2o-experts
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  description: API Documentation for AquaTrack
+tags:
+  - name: Auth
+    description: Operations related to user authentication and authorization, including registration, login, and password management.
+  - name: Users
+    description: Operations related to user management, including profile retrieval and updates.
+  - name: Water
+    description: Operations about water
+servers:
+  - url: http://localhost:3000
+  - url: https://h2o-experts-server.onrender.com
+paths:
+  /users/register:
+    post:
+      $ref: '../swagger/paths/auth/register.yaml'
+  /users/login:
+    post:
+      $ref: '../swagger/paths/auth/login.yaml'
+  /users/refresh-token:
+    post:
+      $ref: '../swagger/paths/auth/refresh-token.yaml'
+  /users/request-reset-pwd:
+    post:
+      $ref: '../swagger/paths/auth/request-reset-pwd.yaml'
+  /users/reset-pwd:
+    post:
+      $ref: '../swagger/paths/auth/reset-pwd.yaml'
+  /users/logout:
+    post:
+      $ref: '../swagger/paths/auth/logout.yaml'
+  /users/user-profile:
+    get:
+      $ref: '../swagger/paths/users/get-user-profile.yaml'
+    patch:
+      $ref: '../swagger/paths/users/patch-user-profile.yaml'
+  /users/total-users:
+    get:
+      $ref: '../swagger/paths/users/total-users.yaml'
+  /water:
+    post:
+      $ref: '../swagger/paths/water/post.yaml'
+  /water/daily:
+    get:
+      $ref: '../swagger/paths/water/daily/get.yaml'
+  /water/month:
+    get:
+      $ref: '../swagger/paths/water/month/get.yaml'
+  /water/{id}:
+    patch:
+      $ref: '../swagger/paths/water/{id}/patch.yaml'
+    delete:
+      $ref: '../swagger/paths/water/{id}/delete.yaml'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer

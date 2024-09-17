@@ -9,10 +9,12 @@ import {
   updateUser,
   sendResetToken,
   resetPassword,
+  loginOrSignupWithGoogle,
 } from '../services/users.js';
 
 import { TOKEN_PARAMS, COOKIES, HTTP_STATUSES } from '../constants/index.js';
 import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
+import { generateAuthUrl } from '../utils/googleOAuth2.js';
 
 export const countUsersController = async (req, res) => {
   const usersCount = await countUsers();
@@ -142,5 +144,31 @@ export const resetPasswordController = async (req, res) => {
     status: HTTP_STATUSES.OK,
     message: 'Password has been successfully reset.',
     data: {},
+  });
+};
+
+// Gooogle oAuth2
+
+export const getGoogleOAuthUrlController = async (req, res) => {
+  const url = generateAuthUrl();
+  res.json({
+    status: 200,
+    message: 'Successfully get Google OAuth url!',
+    data: {
+      url,
+    },
+  });
+};
+
+export const loginWithGoogleController = async (req, res) => {
+  const session = await loginOrSignupWithGoogle(req.body.code);
+  setupSession(res, session);
+
+  res.json({
+    status: 200,
+    message: 'Successfully logged in via Google OAuth!',
+    data: {
+      accessToken: session.accessToken,
+    },
   });
 };
