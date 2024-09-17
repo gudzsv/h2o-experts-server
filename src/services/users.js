@@ -173,29 +173,29 @@ export const resetPassword = async (payload) => {
   let entries;
 
   try {
-    entries = jwt.verify(payload.token, env('JWT_SECRET'));
+    entries = jwt.verify(payload.token, env(ENV_VARS.JWT_SECRET));
   } catch (err) {
     if (err instanceof Error)
-      throw createError(401, 'Token is expired or invalid.');
+      throw createHttpError.Unauthorized('Token is expired or invalid.');
     throw err;
   }
 
-  const user = await UsersCollection.findOne({
+  const user = await UserCollection.findOne({
     email: entries.email,
     _id: entries.sub,
   });
 
   if (!user) {
-    throw createError(404, 'User not found');
+    throw createHttpError.NotFound('User not found');
   }
 
-  const encryptedPassword = await bcrypt.hash(payload.password, 10);
+  const encryptedPassword = await bcrypt.hash(payload.password, SALT);
 
-  await UsersCollection.updateOne(
+  await UserCollection.updateOne(
     { _id: user._id },
     { password: encryptedPassword },
   );
-  await SessionsCollection.deleteOne({ userId: user._id });
+  await SessionCollection.deleteOne({ userId: user._id });
 };
 
 export const loginOrSignupWithGoogle = async (code) => {
