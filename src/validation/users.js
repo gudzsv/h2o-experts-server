@@ -13,3 +13,12 @@ export const updateUserSchema = Joi.object({
   gender: Joi.string().valid('male', 'female'),
   dailyRequirement: Joi.number().integer(),
 });
+
+export const sendResetEmailSchema = Joi.object({
+  email: Joi.string().email().required(),
+});
+
+export const resetPasswordSchema = Joi.object({
+  password: Joi.string().required(),
+  token: Joi.string().required(),
+});
