@@ -41,11 +41,11 @@ export const registerUserController = async (req, res) => {
 const setupSession = (res, session) => {
   res.cookie(COOKIES.REFRESH_TOKEN, session.refreshToken, {
     httpOnly: true,
-    expire: THIRTY_DAYS,
+    maxAge: THIRTY_DAYS,
   });
   res.cookie(COOKIES.SESSION_ID, session._id, {
     httpOnly: true,
-    expire: THIRTY_DAYS,
+    maxAge: THIRTY_DAYS,
   });
 };
 
