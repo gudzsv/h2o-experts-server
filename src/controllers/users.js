@@ -12,7 +12,7 @@ import {
   loginOrSignupWithGoogle,
 } from '../services/users.js';
 
-import { TOKEN_PARAMS, COOKIES, HTTP_STATUSES } from '../constants/index.js';
+import { COOKIES, HTTP_STATUSES, THIRTY_DAYS } from '../constants/index.js';
 import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 import { generateAuthUrl } from '../utils/googleOAuth2.js';
 
@@ -41,11 +41,11 @@ export const registerUserController = async (req, res) => {
 const setupSession = (res, session) => {
   res.cookie(COOKIES.REFRESH_TOKEN, session.refreshToken, {
     httpOnly: true,
-    expires: TOKEN_PARAMS.refreshTokenValidUntil,
+    maxAge: THIRTY_DAYS,
   });
   res.cookie(COOKIES.SESSION_ID, session._id, {
     httpOnly: true,
-    expires: TOKEN_PARAMS.refreshTokenValidUntil,
+    maxAge: THIRTY_DAYS,
   });
 };
 
