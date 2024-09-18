@@ -9,7 +9,8 @@ import handlebars from 'handlebars';
 
 import {
   RANDOM_BYTES,
-  TOKEN_PARAMS,
+  THIRTY_DAYS,
+  ONE_DAY,
   SALT,
   JWT,
   ENV_VARS,
@@ -49,8 +50,8 @@ const createSession = () => {
   return {
     accessToken,
     refreshToken,
-    accessTokenValidUntil: TOKEN_PARAMS.accessTokenValidUntil,
-    refreshTokenValidUntil: TOKEN_PARAMS.refreshTokenValidUntil,
+    accessTokenValidUntil: new Date(Date.now() + ONE_DAY),
+    refreshTokenValidUntil: new Date(Date.now() + THIRTY_DAYS),
   };
 };
 
