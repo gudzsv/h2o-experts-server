@@ -84,7 +84,7 @@ export const THIRTY_DAYS = 30 * ONE_DAY;
 export const TOKEN_PARAMS = {
   accessToken: randomBytes(RANDOM_BYTES).toString('base64'),
   refreshToken: randomBytes(RANDOM_BYTES).toString('base64'),
-  accessTokenValidUntil: new Date(Date.now() + FIFTEEN_MINUTES),
+  accessTokenValidUntil: new Date(Date.now() + ONE_DAY),
   refreshTokenValidUntil: new Date(Date.now() + THIRTY_DAYS),
 };
 
