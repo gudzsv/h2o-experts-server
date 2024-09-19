@@ -42,14 +42,10 @@ const setupSession = (res, session) => {
   res.cookie(COOKIES.REFRESH_TOKEN, session.refreshToken, {
     httpOnly: true,
     maxAge: THIRTY_DAYS,
-    sameSite: 'none',
-    secure,
   });
   res.cookie(COOKIES.SESSION_ID, session._id, {
     httpOnly: true,
     maxAge: THIRTY_DAYS,
-    sameSite: 'none',
-    secure,
   });
 };
 
