@@ -11,9 +11,6 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3000"
-    },
-    {
       "url": "https://h2o-experts-server.onrender.com"
     }
   ],
@@ -32,7 +29,7 @@
     }
   ],
   "paths": {
-    "/users/register": {
+    "/auth/register": {
       "post": {
         "tags": [
           "Auth"
@@ -105,7 +102,7 @@
         ]
       }
     },
-    "/users/login": {
+    "/auth/login": {
       "post": {
         "tags": [
           "Auth"
@@ -186,7 +183,7 @@
         }
       }
     },
-    "/users/refresh-token": {
+    "/auth/refresh-token": {
       "post": {
         "tags": [
           "Auth"
@@ -240,7 +237,7 @@
         }
       }
     },
-    "/users/request-reset-pwd": {
+    "/auth/request-reset-pwd": {
       "post": {
         "tags": [
           "Auth"
@@ -300,7 +297,7 @@
         "security": []
       }
     },
-    "/users/reset-pwd": {
+    "/auth/reset-pwd": {
       "post": {
         "tags": [
           "Auth"
@@ -368,7 +365,7 @@
         "security": []
       }
     },
-    "/users/logout": {
+    "/auth/logout": {
       "post": {
         "tags": [
           "Auth"
@@ -598,11 +595,7 @@
             "$ref": "#/components/responses/500"
           }
         },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
+        "security": []
       }
     },
     "/water": {
