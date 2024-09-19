@@ -2,7 +2,7 @@ tags:
   - Users
 summary: Get current user's profile
 description: Retrieve the profile information of the currently logged-in user
-operationId: getCurrentUserProfile
+operationId: getUserByIdController
 security:
   - bearerAuth: []
 responses:

@@ -1,7 +1,7 @@
 tags:
   - Auth
 summary: Register a new user
-operationId: registerUser
+operationId: registerUserController
 description: Register a new user with the provided information
 requestBody:
   required: true

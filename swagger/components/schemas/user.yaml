@@ -32,6 +32,7 @@ properties:
     description: "User's gender"
     type: string
     default: 'female'
+    enum: ['male', 'female']
     example: 'female'
   dailyRequirement:
     type: number

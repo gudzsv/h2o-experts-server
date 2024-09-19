@@ -1,7 +1,7 @@
 tags:
   - Auth
 summary: Login to the application
-operationId: loginUser
+operationId: loginUserController
 description: Login to the application with credentials
 security:
   - bearerAuth: []
