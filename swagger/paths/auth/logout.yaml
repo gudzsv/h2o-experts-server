@@ -1,7 +1,7 @@
 tags:
   - Auth
 summary: User logout
-operationId: logoutUser
+operationId: logoutUserController
 description: User logout
 security:
   - bearerAuth: []

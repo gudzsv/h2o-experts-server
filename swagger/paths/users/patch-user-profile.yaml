@@ -2,7 +2,7 @@ tags:
   - Users
 summary: Update user profile
 description: Update the current user's profile information
-operationId: updateUserProfile
+operationId: patchUserController
 security:
   - bearerAuth: []
 requestBody:

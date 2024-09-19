@@ -35,7 +35,7 @@
           "Auth"
         ],
         "summary": "Register a new user",
-        "operationId": "registerUser",
+        "operationId": "registerUserController",
         "description": "Register a new user with the provided information",
         "requestBody": {
           "required": true,
@@ -108,7 +108,7 @@
           "Auth"
         ],
         "summary": "Login to the application",
-        "operationId": "loginUser",
+        "operationId": "loginUserController",
         "description": "Login to the application with credentials",
         "security": [
           {
@@ -183,13 +183,13 @@
         }
       }
     },
-    "/auth/refresh-token": {
+    "/auth/refresh": {
       "post": {
         "tags": [
           "Auth"
         ],
         "summary": "Refresh the authentication token",
-        "operationId": "refreshToken",
+        "operationId": "refreshUserSessionController",
         "description": "Obtain a new authentication token using a refresh token",
         "security": [
           {
@@ -243,7 +243,7 @@
           "Auth"
         ],
         "summary": "Request password reset",
-        "operationId": "requestResetPassword",
+        "operationId": "sendResetEmailController",
         "description": "Request a password reset link to be sent to the user's email",
         "requestBody": {
           "required": true,
@@ -371,7 +371,7 @@
           "Auth"
         ],
         "summary": "User logout",
-        "operationId": "logoutUser",
+        "operationId": "logoutUserController",
         "description": "User logout",
         "security": [
           {
@@ -388,6 +388,126 @@
         }
       }
     },
+    "/auth/get-oauth-url": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Get Google OAuth URL",
+        "description": "Retrieve the URL for Google OAuth login",
+        "operationId": "getGoogleOAuthUrlController",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully get Google OAuth url",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully retrieved Google OAuth URL"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "oauthUrl": {
+                          "type": "string",
+                          "description": "The URL to initiate Google OAuth login",
+                          "example": "https://accounts.google.com/o/oauth2/h2o-experts-app/auth?scope=email%20profile&response_type=code&client_id=YOUR_CLIENT_ID&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fconfirm-google-auth"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          }
+        }
+      }
+    },
+    "/auth/confirm-oauth": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Confirm Google OAuth",
+        "description": "Handle the callback from Google OAuth and log in the user",
+        "operationId": "loginWithGoogleController",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "The authorization code returned by Google",
+                    "example": "4/P7q7W91a-oMsCeLvIaQm6bTrgtp7"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully logged in via Google OAuth!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully logged in via Google OAuth!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "accessToken": {
+                          "type": "string",
+                          "description": "The JWT access token for the user",
+                          "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          }
+        }
+      }
+    },
     "/users/user-profile": {
       "get": {
         "tags": [
@@ -395,7 +515,7 @@
         ],
         "summary": "Get current user's profile",
         "description": "Retrieve the profile information of the currently logged-in user",
-        "operationId": "getCurrentUserProfile",
+        "operationId": "getUserByIdController",
         "security": [
           {
             "bearerAuth": []
@@ -489,7 +609,7 @@
         ],
         "summary": "Update user profile",
         "description": "Update the current user's profile information",
-        "operationId": "updateUserProfile",
+        "operationId": "patchUserController",
         "security": [
           {
             "bearerAuth": []
@@ -993,6 +1113,10 @@
             "description": "User's gender",
             "type": "string",
             "default": "female",
+            "enum": [
+              "male",
+              "female"
+            ],
             "example": "female"
           },
           "dailyRequirement": {
@@ -1010,7 +1134,9 @@
       "water": {
         "type": "object",
         "required": [
-          "usedWater"
+          "usedWater",
+          "drinkingTime",
+          "userId"
         ],
         "properties": {
           "_id": {

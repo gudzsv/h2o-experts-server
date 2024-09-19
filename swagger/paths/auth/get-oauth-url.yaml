@@ -1,0 +1,30 @@
+tags:
+  - Auth
+summary: Get Google OAuth URL
+description: Retrieve the URL for Google OAuth login
+operationId: getGoogleOAuthUrlController
+security:
+  - bearerAuth: []
+responses:
+  '200':
+    description: Successfully get Google OAuth url
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Successfully retrieved Google OAuth URL
+            data:
+              type: object
+              properties:
+                oauthUrl:
+                  type: string
+                  description: The URL to initiate Google OAuth login
+                  example: https://accounts.google.com/o/oauth2/h2o-experts-app/auth?scope=email%20profile&response_type=code&client_id=YOUR_CLIENT_ID&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fconfirm-google-auth
+  '400':
+    $ref: '../../components/responses/400.yaml'

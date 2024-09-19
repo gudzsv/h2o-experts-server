@@ -22,18 +22,24 @@ paths:
   /auth/login:
     post:
       $ref: '../swagger/paths/auth/login.yaml'
-  /auth/refresh-token:
+  /auth/refresh:
     post:
-      $ref: '../swagger/paths/auth/refresh-token.yaml'
+      $ref: '../swagger/paths/auth/refresh.yaml'
   /auth/request-reset-pwd:
     post:
-      $ref: '../swagger/paths/auth/request-reset-pwd.yaml'
+      $ref: '../swagger/paths/auth/send-reset-email.yaml'
   /auth/reset-pwd:
     post:
       $ref: '../swagger/paths/auth/reset-pwd.yaml'
   /auth/logout:
     post:
       $ref: '../swagger/paths/auth/logout.yaml'
+  /auth/get-oauth-url:
+    get:
+      $ref: '../swagger/paths/auth/get-oauth-url.yaml'
+  /auth/confirm-oauth:
+    post:
+      $ref: '../swagger/paths/auth/confirm-oauth.yaml'
   /users/user-profile:
     get:
       $ref: '../swagger/paths/users/get-user-profile.yaml'

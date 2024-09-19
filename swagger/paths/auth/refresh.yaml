@@ -1,7 +1,7 @@
 tags:
   - Auth
 summary: Refresh the authentication token
-operationId: refreshToken
+operationId: refreshUserSessionController
 description: Obtain a new authentication token using a refresh token
 security:
   - bearerAuth: []
