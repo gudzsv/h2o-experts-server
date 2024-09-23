@@ -50,8 +50,6 @@ router.post(
   ctrlWrapper(loginWithGoogleController),
 );
 
-router.use(authenticate);
-
 router.post(
   '/send-reset-email',
   jsonParser,
