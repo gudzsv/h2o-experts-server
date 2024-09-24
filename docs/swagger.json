@@ -737,11 +737,11 @@
               "schema": {
                 "type": "object",
                 "required": [
-                  "volume"
+                  "usedWater"
                 ],
                 "properties": {
-                  "volume": {
-                    "description": "Water's volume",
+                  "usedWater": {
+                    "description": "Water's usedWater",
                     "type": "number",
                     "example": 80
                   }
@@ -752,7 +752,7 @@
         },
         "responses": {
           "201": {
-            "description": "Creates water volume",
+            "description": "Creates water usedWater",
             "content": {
               "application/json": {
                 "schema": {
@@ -802,27 +802,19 @@
         "parameters": [
           {
             "in": "query",
-            "name": "year",
+            "name": "yearMonth",
             "schema": {
-              "type": "integer"
+              "type": "integer",
+              "pattern": "(/^\\d{4}-\\d{2}$/)"
             },
-            "example": 2024
+            "example": "2024-06"
           },
           {
             "in": "query",
-            "name": "month",
+            "name": "date",
             "schema": {
               "type": "string",
-              "pattern": "^\\d{2}$",
-              "example": "07"
-            }
-          },
-          {
-            "in": "query",
-            "name": "day",
-            "schema": {
-              "type": "string",
-              "pattern": "^\\d{2}$",
+              "pattern": "(/^\\d{4}-\\d{2}-\\d{2}$/)",
               "example": "20"
             },
             "description": ""
@@ -849,7 +841,7 @@
                             "type": "string",
                             "example": "669b4b5ee4582ae60fc053a8"
                           },
-                          "volume": {
+                          "usedWater": {
                             "type": "integer",
                             "example": 60
                           },
@@ -861,7 +853,7 @@
                             "type": "string",
                             "example": "20.07.2024"
                           },
-                          "time": {
+                          "drinkingTime": {
                             "type": "string",
                             "example": "09:50"
                           },
@@ -953,9 +945,9 @@
         "tags": [
           "Water"
         ],
-        "summary": "Update water volume by id",
+        "summary": "Update  usedWater by id",
         "operationId": "patchWater",
-        "description": "Update water volume by id",
+        "description": "Update  usedWater by id",
         "security": [
           {
             "bearerAuth": []
@@ -978,7 +970,7 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "volume": {
+                  "usedWater": {
                     "description": "Water volume",
                     "type": "number",
                     "example": 60
@@ -1092,6 +1084,10 @@
           "email": {
             "description": "User's email",
             "type": "string",
+            "enum": [
+              "/.+@.+\\..+/",
+              "Please fill a valid email address"
+            ],
             "example": "test@swagger.com"
           },
           "password": {

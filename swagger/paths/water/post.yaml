@@ -11,15 +11,15 @@ requestBody:
       schema:
         type: object
         required:
-          - volume
+          - usedWater
         properties:
-          volume:
-            description: "Water's volume"
+          usedWater:
+            description: "Water's usedWater"
             type: number
             example: 80
 responses:
   '201':
-    description: Creates water volume
+    description: Creates water usedWater
     content:
       application/json:
         schema:
