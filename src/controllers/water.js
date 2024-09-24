@@ -73,7 +73,7 @@ export const dateWaterController = async (req, res, next) => {
   res.status(STATUS_OK).json({
     status: STATUS_OK,
     message: 'Water by date found successfully',
-    data: waterByDate,
+    date: waterByDate,
   });
 };
 
@@ -91,6 +91,6 @@ export const monthWaterController = async (req, res, next) => {
   res.status(STATUS_OK).json({
     status: STATUS_OK,
     message: 'Water by month found successfully',
-    data: waterByDateMonth,
+    date: waterByDateMonth,
   });
 };
