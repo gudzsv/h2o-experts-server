@@ -15,6 +15,7 @@ properties:
   email:
     description: "User's email"
     type: string
+    enum: [/.+@.+\..+/, 'Please fill a valid email address']
     example: 'test@swagger.com'
   password:
     description: "User's password"
