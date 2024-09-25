@@ -95,11 +95,7 @@
             "description": "Email in use"
           }
         },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
+        "security": []
       }
     },
     "/auth/login": {
@@ -110,11 +106,7 @@
         "summary": "Login to the application",
         "operationId": "loginUserController",
         "description": "Login to the application with credentials",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
+        "security": [],
         "requestBody": {
           "required": true,
           "content": {
