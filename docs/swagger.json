@@ -95,11 +95,7 @@
             "description": "Email in use"
           }
         },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
+        "security": []
       }
     },
     "/auth/login": {
@@ -110,11 +106,7 @@
         "summary": "Login to the application",
         "operationId": "loginUserController",
         "description": "Login to the application with credentials",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
+        "security": [],
         "requestBody": {
           "required": true,
           "content": {
@@ -191,11 +183,7 @@
         "summary": "Refresh the authentication token",
         "operationId": "refreshUserSessionController",
         "description": "Obtain a new authentication token using a refresh token",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
+        "security": [],
         "responses": {
           "200": {
             "description": "Token refreshed successfully",
@@ -373,11 +361,7 @@
         "summary": "User logout",
         "operationId": "logoutUserController",
         "description": "User logout",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
+        "security": [],
         "responses": {
           "204": {
             "description": "Successful logout"
@@ -396,11 +380,7 @@
         "summary": "Get Google OAuth URL",
         "description": "Retrieve the URL for Google OAuth login",
         "operationId": "getGoogleOAuthUrlController",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
+        "security": [],
         "responses": {
           "200": {
             "description": "Successfully get Google OAuth url",
@@ -446,11 +426,7 @@
         "summary": "Confirm Google OAuth",
         "description": "Handle the callback from Google OAuth and log in the user",
         "operationId": "loginWithGoogleController",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
+        "security": [],
         "requestBody": {
           "required": true,
           "content": {

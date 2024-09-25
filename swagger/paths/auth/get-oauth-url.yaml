@@ -3,8 +3,7 @@ tags:
 summary: Get Google OAuth URL
 description: Retrieve the URL for Google OAuth login
 operationId: getGoogleOAuthUrlController
-security:
-  - bearerAuth: []
+security: []
 responses:
   '200':
     description: Successfully get Google OAuth url

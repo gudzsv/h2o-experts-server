@@ -3,8 +3,7 @@ tags:
 summary: Refresh the authentication token
 operationId: refreshUserSessionController
 description: Obtain a new authentication token using a refresh token
-security:
-  - bearerAuth: []
+security: []
 responses:
   '200':
     description: Token refreshed successfully
