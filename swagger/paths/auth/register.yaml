@@ -42,5 +42,4 @@ responses:
                   example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
   '409':
     description: Email in use
-security:
-  - bearerAuth: []
+security: []
