@@ -3,8 +3,7 @@ tags:
 summary: Confirm Google OAuth
 description: Handle the callback from Google OAuth and log in the user
 operationId: loginWithGoogleController
-security:
-  - bearerAuth: []
+security: []
 requestBody:
   required: true
   content:
