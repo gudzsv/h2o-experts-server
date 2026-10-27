@@ -116,6 +116,58 @@ describe('calculateWaterStats', () => {
   });
 });
 
+describe('all-time achievements data', () => {
+  it('sums the water and counts early days up to today', () => {
+    const stats = calculateWaterStats(
+      [
+        { date: '2024-03-01', total: 1500, early: true },
+        { date: '2024-03-09', total: 2500, early: false },
+        { date: '2024-03-10', total: 500, early: true },
+        { date: '2024-03-11', total: 9000, early: true },
+      ],
+      options,
+    );
+
+    assert.equal(stats.totalMl, 4500);
+    assert.equal(stats.earlyDays, 2);
+  });
+
+  it('counts only full Monday-Sunday weeks with the goal met', () => {
+    // 2024-02-26 and 2024-03-04 are Mondays; today is Sunday 2024-03-10.
+    const week = (monday) =>
+      Array.from({ length: 7 }, (_, index) => ({
+        date: `2024-${monday[0]}-${String(monday[1] + index).padStart(2, '0')}`,
+        total: 2000,
+      }));
+    const stats = calculateWaterStats(
+      [
+        // 27 Feb to 4 Mar: 7 days in a row, but not Monday to Sunday.
+        ...week(['02', 27]).slice(0, 3),
+        { date: '2024-03-01', total: 2000 },
+        { date: '2024-03-02', total: 2000 },
+        { date: '2024-03-03', total: 2000 },
+        ...week(['03', 4]),
+      ],
+      options,
+    );
+
+    assert.equal(stats.perfectWeeks, 1);
+    assert.equal(stats.bestStreak, 13);
+  });
+
+  it('does not count the current week before Sunday is over', () => {
+    const stats = calculateWaterStats(
+      Array.from({ length: 6 }, (_, index) => ({
+        date: `2024-03-0${4 + index}`,
+        total: 2000,
+      })),
+      { today: '2024-03-09', dailyRequirement: 2000 },
+    );
+
+    assert.equal(stats.perfectWeeks, 0);
+  });
+});
+
 describe('getMonthStart', () => {
   it('starts the window 29 days before today', () => {
     assert.equal(getMonthStart('2024-03-10'), '2024-02-10');

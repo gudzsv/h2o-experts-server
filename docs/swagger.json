@@ -972,6 +972,9 @@
                         "monthAverage",
                         "completionRate",
                         "totalGoalDays",
+                        "totalMl",
+                        "earlyDays",
+                        "perfectWeeks",
                         "days",
                         "timeOfDay"
                       ],
@@ -1008,6 +1011,21 @@
                           "type": "integer",
                           "description": "All days with the goal met",
                           "example": 21
+                        },
+                        "totalMl": {
+                          "type": "number",
+                          "description": "All water ever recorded up to today, in ml",
+                          "example": 64000
+                        },
+                        "earlyDays": {
+                          "type": "integer",
+                          "description": "All days with water drunk at 05:00-08:59",
+                          "example": 9
+                        },
+                        "perfectWeeks": {
+                          "type": "integer",
+                          "description": "Monday-Sunday weeks, up to today, with the goal met on every day",
+                          "example": 2
                         },
                         "days": {
                           "type": "array",

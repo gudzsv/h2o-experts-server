@@ -41,8 +41,26 @@ export const calculateTimeOfDay = (hourlyTotals) => {
   return timeOfDay;
 };
 
+// Monday-Sunday weeks, up to today, with the goal met on every day.
+const countPerfectWeeks = (goalDates, today) => {
+  const goalSet = new Set(goalDates);
+  const isMonday = (date) => new Date(toTime(date)).getUTCDay() === 1;
+
+  return goalDates.filter((monday) => {
+    const sunday = shiftDate(monday, WEEK_DAYS - 1);
+    return (
+      isMonday(monday) &&
+      sunday <= today &&
+      Array.from({ length: WEEK_DAYS }, (_, index) =>
+        shiftDate(monday, index),
+      ).every((date) => goalSet.has(date))
+    );
+  }).length;
+};
+
 /**
- * @param {{ date: string, total: number }[]} dailyTotals water per day, in ml
+ * @param {{ date: string, total: number, early?: boolean }[]} dailyTotals
+ * water per day, in ml; `early` is true when some of it was drunk before 9:00
  * @param {{ today: string, dailyRequirement: number }} options
  *
  * The goal is the current dailyRequirement for every day, so changes of the
@@ -55,6 +73,9 @@ export const calculateWaterStats = (
   const totals = new Map(dailyTotals.map(({ date, total }) => [date, total]));
   const getTotal = (date) => totals.get(date) ?? 0;
   const isGoalMet = (date) => getTotal(date) >= dailyRequirement;
+
+  // All-time figures ignore records dated after today.
+  const pastDays = dailyTotals.filter(({ date }) => date <= today);
 
   const goalDates = [...totals.keys()]
     .filter((date) => date <= today && isGoalMet(date))
@@ -105,6 +126,9 @@ export const calculateWaterStats = (
     monthAverage: average(days),
     completionRate,
     totalGoalDays: goalDates.length,
+    totalMl: sum(pastDays.map(({ total }) => total)),
+    earlyDays: pastDays.filter(({ early }) => early).length,
+    perfectWeeks: countPerfectWeeks(goalDates, today),
     days,
   };
 };
