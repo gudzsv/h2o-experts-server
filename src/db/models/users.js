@@ -39,6 +39,12 @@ const usersSchema = new Schema(
       default: 2000,
     },
 
+    units: {
+      type: String,
+      enum: ['ml', 'oz'],
+      default: 'ml',
+    },
+
     photo: {
       type: String,
     },

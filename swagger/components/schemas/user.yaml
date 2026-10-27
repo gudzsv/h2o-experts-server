@@ -39,6 +39,12 @@ properties:
     type: number
     description: "User's daily rate of water"
     default: 2000
+  units:
+    description: 'Volume units used to display water amounts. Amounts are always stored in milliliters.'
+    type: string
+    default: 'ml'
+    enum: ['ml', 'oz']
+    example: 'ml'
   photo:
     description: "User's photo"
     type: string

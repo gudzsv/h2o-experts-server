@@ -12,6 +12,7 @@ export const updateUserSchema = Joi.object({
   activityLevel: Joi.number(),
   gender: Joi.string().valid('male', 'female'),
   dailyRequirement: Joi.number().integer(),
+  units: Joi.string().valid('ml', 'oz'),
 });
 
 export const sendResetEmailSchema = Joi.object({
