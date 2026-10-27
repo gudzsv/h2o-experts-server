@@ -68,8 +68,6 @@ export const loginUser = async (payload) => {
     throw createHttpError.Unauthorized('Unauthorized user.');
   }
 
-  await SessionCollection.deleteOne({ userId: user._id });
-
   const newSession = createSession();
 
   return await SessionCollection.create({
@@ -200,7 +198,7 @@ export const resetPassword = async (payload) => {
     { _id: user._id },
     { password: encryptedPassword },
   );
-  await SessionCollection.deleteOne({ userId: user._id });
+  await SessionCollection.deleteMany({ userId: user._id });
 };
 
 export const loginOrSignupWithGoogle = async (code) => {

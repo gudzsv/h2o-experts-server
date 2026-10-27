@@ -20,4 +20,7 @@ const waterSchema = new Schema(
   },
 );
 
+// The day and month queries filter by user and a drinkingTime range.
+waterSchema.index({ userId: 1, drinkingTime: 1 });
+
 export const WaterCollection = model('water', waterSchema);

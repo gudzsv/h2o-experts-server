@@ -38,18 +38,21 @@ export const registerUserController = async (req, res) => {
   });
 };
 
+// Cookies can only be cleared with the same attributes they were set with.
+const COOKIE_OPTIONS = {
+  httpOnly: true,
+  sameSite: 'None',
+  secure: true,
+};
+
 const setupSession = (res, session) => {
   res.cookie(COOKIES.REFRESH_TOKEN, session.refreshToken, {
-    httpOnly: true,
+    ...COOKIE_OPTIONS,
     maxAge: THIRTY_DAYS,
-    sameSite: 'None',
-    secure: true,
   });
   res.cookie(COOKIES.SESSION_ID, session._id, {
-    httpOnly: true,
+    ...COOKIE_OPTIONS,
     maxAge: THIRTY_DAYS,
-    sameSite: 'None',
-    secure: true,
   });
 };
 
@@ -72,8 +75,8 @@ export const logoutUserController = async (req, res) => {
     await logoutUser(req.cookies.sessionId);
   }
 
-  res.clearCookie(COOKIES.SESSION_ID);
-  res.clearCookie(COOKIES.REFRESH_TOKEN);
+  res.clearCookie(COOKIES.SESSION_ID, COOKIE_OPTIONS);
+  res.clearCookie(COOKIES.REFRESH_TOKEN, COOKIE_OPTIONS);
 
   res.status(HTTP_STATUSES.NO_CONTENT).send();
 };
@@ -100,7 +103,7 @@ export const getUserByIdController = async (req, res, next) => {
   const user = await getUserById(userId);
 
   if (!user) {
-    next(createHttpError.NotFound('Contact not found'));
+    return next(createHttpError.NotFound('Contact not found'));
   }
 
   res.status(HTTP_STATUSES.OK).json({
