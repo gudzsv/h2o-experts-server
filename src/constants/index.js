@@ -1,4 +1,3 @@
-import { randomBytes } from 'crypto';
 import path from 'path';
 
 export const ENV_VARS = {
@@ -80,13 +79,6 @@ export const SALT = 10;
 export const FIFTEEN_MINUTES = 15 * 60 * 1000;
 export const ONE_DAY = 24 * 60 * 60 * 1000;
 export const THIRTY_DAYS = 30 * ONE_DAY;
-
-export const TOKEN_PARAMS = {
-  accessToken: randomBytes(RANDOM_BYTES).toString('base64'),
-  refreshToken: randomBytes(RANDOM_BYTES).toString('base64'),
-  accessTokenValidUntil: new Date(Date.now() + ONE_DAY),
-  refreshTokenValidUntil: new Date(Date.now() + THIRTY_DAYS),
-};
 
 export const COOKIES = {
   SESSION_ID: 'sessionId',
