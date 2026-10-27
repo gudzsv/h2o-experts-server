@@ -32,13 +32,16 @@ export const updateWaterController = async (req, res, next) => {
   const usedWater = req.body.usedWater;
   const drinkingTime = req.body.drinkingTime;
 
-  const water = await updateWater(waterId, userId, { usedWater, drinkingTime });
+  const { data: water, isNew } = await updateWater(waterId, userId, {
+    usedWater,
+    drinkingTime,
+  });
 
   if (!water) {
     return next(createHttpError.NotFound('Water not found'));
   }
 
-  const status = water?.isNew ? STATUS_CREATED : STATUS_OK;
+  const status = isNew ? STATUS_CREATED : STATUS_OK;
 
   res.status(status).json({
     status: status,
