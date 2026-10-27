@@ -17,6 +17,11 @@ requestBody:
             description: "Water's usedWater"
             type: number
             example: 80
+          drinkType:
+            description: 'Kind of drink; it sets the share counted toward the goal (water 100%, tea and milk 90%, coffee and juice 80%, soda 70%). Defaults to water.'
+            type: string
+            enum: [water, tea, milk, coffee, juice, soda]
+            example: coffee
 responses:
   '201':
     description: Creates water usedWater

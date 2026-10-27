@@ -1,5 +1,9 @@
 import { WaterCollection } from '../db/models/water.js';
 
+// Stats count the ml toward the goal; entries from before drink types have
+// no `hydration` and count as water.
+const COUNTED_ML = { $ifNull: ['$hydration', '$usedWater'] };
+
 export const addWater = async (payload) =>
   await WaterCollection.create(payload);
 
@@ -18,6 +22,9 @@ export const updateWater = async (waterId, userId, payload, options = {}) => {
     isNew: Boolean(water?.lastErrorObject?.upserted),
   };
 };
+
+export const getWaterById = async (waterId, userId) =>
+  await WaterCollection.findOne({ _id: waterId, userId });
 
 export const deleteWater = async (waterId, userId) => {
   const water = await WaterCollection.findOneAndDelete({
@@ -58,7 +65,7 @@ export const getDailyTotals = async (userId) =>
     {
       $group: {
         _id: { $substrBytes: ['$drinkingTime', 0, 10] },
-        total: { $sum: '$usedWater' },
+        total: { $sum: COUNTED_ML },
         // True when some water was drunk at 05:00-08:59.
         early: {
           $max: {
@@ -89,7 +96,7 @@ export const getHourlyTotals = async (userId, fromDate, toDate) =>
     {
       $group: {
         _id: { $substrBytes: ['$drinkingTime', 11, 2] },
-        total: { $sum: '$usedWater' },
+        total: { $sum: COUNTED_ML },
       },
     },
     { $project: { _id: 0, hour: '$_id', total: 1 } },

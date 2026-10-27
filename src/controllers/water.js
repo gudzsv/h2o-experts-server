@@ -5,10 +5,12 @@ import {
   getDailyTotals,
   getHourlyTotals,
   getmonthWater,
+  getWaterById,
   getWaterByDate,
   updateWater,
 } from '../services/water.js';
 import { HTTP_STATUSES } from '../constants/index.js';
+import { calculateHydration } from '../utils/drinks.js';
 import {
   calculateTimeOfDay,
   calculateWaterStats,
@@ -20,11 +22,16 @@ const STATUS_CREATED = HTTP_STATUSES.CREATED;
 const STATUS_NO_CONTENT = HTTP_STATUSES.NO_CONTENT;
 
 export const addWaterController = async (req, res, next) => {
-  const usedWater = req.body.usedWater;
-  const drinkingTime = req.body.drinkingTime;
+  const { usedWater, drinkingTime, drinkType = 'water' } = req.body;
   const userId = req.user._id;
 
-  const water = await addWater({ usedWater, drinkingTime, userId });
+  const water = await addWater({
+    usedWater,
+    drinkingTime,
+    drinkType,
+    hydration: calculateHydration(usedWater, drinkType),
+    userId,
+  });
 
   res.status(STATUS_CREATED).json({
     status: STATUS_CREATED,
@@ -36,13 +43,23 @@ export const addWaterController = async (req, res, next) => {
 export const updateWaterController = async (req, res, next) => {
   const { waterId } = req.params;
   const userId = req.user._id;
-  const usedWater = req.body.usedWater;
-  const drinkingTime = req.body.drinkingTime;
+  const { usedWater, drinkingTime, drinkType } = req.body;
+  const changes = { usedWater, drinkingTime, drinkType };
 
-  const { data: water, isNew } = await updateWater(waterId, userId, {
-    usedWater,
-    drinkingTime,
-  });
+  // The counted ml depend on both the volume and the type, so a change of
+  // either needs the other one from the saved entry.
+  if (usedWater !== undefined || drinkType !== undefined) {
+    const current = await getWaterById(waterId, userId);
+    if (!current) {
+      return next(createHttpError.NotFound('Water not found'));
+    }
+    changes.hydration = calculateHydration(
+      usedWater ?? current.usedWater,
+      drinkType ?? current.drinkType,
+    );
+  }
+
+  const { data: water, isNew } = await updateWater(waterId, userId, changes);
 
   if (!water) {
     return next(createHttpError.NotFound('Water not found'));

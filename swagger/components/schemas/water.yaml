@@ -12,6 +12,15 @@ properties:
     description: "Water's volume"
     type: number
     example: 60
+  drinkType:
+    description: 'Kind of drink'
+    type: string
+    enum: [water, tea, milk, coffee, juice, soda]
+    example: coffee
+  hydration:
+    description: 'Ml counted toward the goal (usedWater times the share of the drink). Missing on entries from before drink types: count usedWater.'
+    type: number
+    example: 48
   userId:
     description: 'Id of the user who manages the water volume'
     type: string

@@ -729,6 +729,19 @@
                     "description": "Water's usedWater",
                     "type": "number",
                     "example": 80
+                  },
+                  "drinkType": {
+                    "description": "Kind of drink; it sets the share counted toward the goal (water 100%, tea and milk 90%, coffee and juice 80%, soda 70%). Defaults to water.",
+                    "type": "string",
+                    "enum": [
+                      "water",
+                      "tea",
+                      "milk",
+                      "coffee",
+                      "juice",
+                      "soda"
+                    ],
+                    "example": "coffee"
                   }
                 }
               }
@@ -932,7 +945,7 @@
         ],
         "summary": "Get drinking statistics and streaks",
         "operationId": "getWaterStats",
-        "description": "Streaks, averages and the share of days with the daily goal met. A day is the first 10 characters of drinkingTime, and the current dailyRequirement is used as the goal for every day.",
+        "description": "Streaks, averages and the share of days with the daily goal met. A day is the first 10 characters of drinkingTime, totals count the hydration of each entry (usedWater for entries without it), and the current dailyRequirement is used as the goal for every day.",
         "security": [
           {
             "bearerAuth": []
@@ -1119,6 +1132,19 @@
                     "description": "Water volume",
                     "type": "number",
                     "example": 60
+                  },
+                  "drinkType": {
+                    "description": "Kind of drink; it sets the share counted toward the goal (water 100%, tea and milk 90%, coffee and juice 80%, soda 70%). Defaults to water.",
+                    "type": "string",
+                    "enum": [
+                      "water",
+                      "tea",
+                      "milk",
+                      "coffee",
+                      "juice",
+                      "soda"
+                    ],
+                    "example": "coffee"
                   }
                 }
               }
@@ -1299,6 +1325,24 @@
             "description": "Water's volume",
             "type": "number",
             "example": 60
+          },
+          "drinkType": {
+            "description": "Kind of drink",
+            "type": "string",
+            "enum": [
+              "water",
+              "tea",
+              "milk",
+              "coffee",
+              "juice",
+              "soda"
+            ],
+            "example": "coffee"
+          },
+          "hydration": {
+            "description": "Ml counted toward the goal (usedWater times the share of the drink). Missing on entries from before drink types: count usedWater.",
+            "type": "number",
+            "example": 48
           },
           "userId": {
             "description": "Id of the user who manages the water volume",

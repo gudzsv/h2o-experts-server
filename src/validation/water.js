@@ -1,6 +1,8 @@
 import Joi from 'joi';
 import { JOI_VALIDATION_MSG } from '../constants/index.js';
-const { REQUIRED, NUMBER, STRING, TIME, DATE, MONTH } = JOI_VALIDATION_MSG;
+import { DRINK_TYPES } from '../utils/drinks.js';
+const { REQUIRED, NUMBER, STRING, TIME, DATE, MONTH, ONE_OF } =
+  JOI_VALIDATION_MSG;
 
 const isoDateTimeRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/;
 
@@ -15,6 +17,13 @@ export const addWaterSchema = Joi.object({
     'string.pattern.base': TIME,
     'any.required': REQUIRED,
   }),
+
+  drinkType: Joi.string()
+    .valid(...DRINK_TYPES)
+    .messages({
+      'string.base': STRING,
+      'any.only': ONE_OF,
+    }),
 });
 
 export const updateWaterSchema = Joi.object({
@@ -26,6 +35,13 @@ export const updateWaterSchema = Joi.object({
     'string.base': STRING,
     'string.pattern.base': TIME,
   }),
+
+  drinkType: Joi.string()
+    .valid(...DRINK_TYPES)
+    .messages({
+      'string.base': STRING,
+      'any.only': ONE_OF,
+    }),
 });
 
 export const dateSchema = Joi.object({
