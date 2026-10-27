@@ -2,7 +2,7 @@ tags:
   - Water
 summary: Get drinking statistics and streaks
 operationId: getWaterStats
-description: 'Streaks, averages and the share of days with the daily goal met. A day is the first 10 characters of drinkingTime, and the current dailyRequirement is used as the goal for every day.'
+description: 'Streaks, averages and the share of days with the daily goal met. A day is the first 10 characters of drinkingTime, totals count the hydration of each entry (usedWater for entries without it), and the current dailyRequirement is used as the goal for every day.'
 security:
   - bearerAuth: []
 parameters:
