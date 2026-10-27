@@ -51,3 +51,15 @@ export const getmonthWater = async (userId, yearMonth) => {
 
   return water;
 };
+
+export const getDailyTotals = async (userId) =>
+  await WaterCollection.aggregate([
+    { $match: { userId } },
+    {
+      $group: {
+        _id: { $substrBytes: ['$drinkingTime', 0, 10] },
+        total: { $sum: '$usedWater' },
+      },
+    },
+    { $project: { _id: 0, date: '$_id', total: 1 } },
+  ]);

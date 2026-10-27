@@ -2,11 +2,13 @@ import createHttpError from 'http-errors';
 import {
   addWater,
   deleteWater,
+  getDailyTotals,
   getmonthWater,
   getWaterByDate,
   updateWater,
 } from '../services/water.js';
 import { HTTP_STATUSES } from '../constants/index.js';
+import { calculateWaterStats } from '../utils/waterStats.js';
 
 let STATUS_OK = HTTP_STATUSES.OK;
 const STATUS_CREATED = HTTP_STATUSES.CREATED;
@@ -77,6 +79,19 @@ export const dateWaterController = async (req, res, next) => {
     status: STATUS_OK,
     message: 'Water by date found successfully',
     date: waterByDate,
+  });
+};
+
+export const statsWaterController = async (req, res) => {
+  const { today } = req.query;
+  const { _id: userId, dailyRequirement } = req.user;
+
+  const dailyTotals = await getDailyTotals(userId);
+
+  res.status(STATUS_OK).json({
+    status: STATUS_OK,
+    message: 'Water stats calculated successfully',
+    data: calculateWaterStats(dailyTotals, { today, dailyRequirement }),
   });
 };
 

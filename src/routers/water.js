@@ -4,6 +4,7 @@ import {
   addWaterSchema,
   dateSchema,
   monthSchema,
+  statsSchema,
   updateWaterSchema,
 } from '../validation/water.js';
 import {
@@ -11,11 +12,13 @@ import {
   dateWaterController,
   deleteWaterController,
   monthWaterController,
+  statsWaterController,
   updateWaterController,
 } from './../controllers/water.js';
 import { ctrlWrapper } from './../utils/ctrlWrapper.js';
 import { isValidId } from './../middlewares/isValidId.js';
 import { validateParams } from '../middlewares/validateParams.js';
+import { validateQuery } from '../middlewares/validateQuery.js';
 
 const router = Router();
 const jsonParser = json();
@@ -52,6 +55,12 @@ router.get(
   '/month/:yearMonth',
   validateParams(monthSchema),
   ctrlWrapper(monthWaterController),
+);
+
+router.get(
+  '/stats',
+  validateQuery(statsSchema),
+  ctrlWrapper(statsWaterController),
 );
 
 export default router;

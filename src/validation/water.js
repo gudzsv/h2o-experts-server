@@ -38,6 +38,23 @@ export const dateSchema = Joi.object({
     }),
 });
 
+export const statsSchema = Joi.object({
+  today: Joi.string()
+    .pattern(/^\d{4}-\d{2}-\d{2}$/)
+    .custom((value, helpers) => {
+      const date = new Date(`${value}T00:00:00Z`);
+      const isRealDate =
+        !Number.isNaN(date.getTime()) && date.toISOString().startsWith(value);
+
+      return isRealDate ? value : helpers.error('string.pattern.base');
+    })
+    .required()
+    .messages({
+      'string.pattern.base': DATE,
+      'any.required': REQUIRED,
+    }),
+});
+
 export const monthSchema = Joi.object({
   yearMonth: Joi.string()
     .pattern(/^\d{4}-\d{2}$/)
