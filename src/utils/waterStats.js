@@ -16,6 +16,31 @@ const getLastDays = (today, count) =>
 
 const sum = (values) => values.reduce((acc, value) => acc + value, 0);
 
+// The first day of the 30-day window that ends today.
+export const getMonthStart = (today) => shiftDate(today, 1 - MONTH_DAYS);
+
+// Morning 05-11, afternoon 12-16, evening 17-21, night 22-04.
+const getDayPart = (hour) => {
+  if (hour >= 5 && hour < 12) return 'morning';
+  if (hour >= 12 && hour < 17) return 'afternoon';
+  if (hour >= 17 && hour < 22) return 'evening';
+  return 'night';
+};
+
+/**
+ * @param {{ hour: string, total: number }[]} hourlyTotals water per hour of
+ * the day ('00'-'23'), in ml
+ */
+export const calculateTimeOfDay = (hourlyTotals) => {
+  const timeOfDay = { morning: 0, afternoon: 0, evening: 0, night: 0 };
+
+  hourlyTotals.forEach(({ hour, total }) => {
+    timeOfDay[getDayPart(Number(hour))] += total;
+  });
+
+  return timeOfDay;
+};
+
 /**
  * @param {{ date: string, total: number }[]} dailyTotals water per day, in ml
  * @param {{ today: string, dailyRequirement: number }} options

@@ -63,3 +63,25 @@ export const getDailyTotals = async (userId) =>
     },
     { $project: { _id: 0, date: '$_id', total: 1 } },
   ]);
+
+// Water per hour of the day (characters 11-12 of drinkingTime) between two
+// dates, both included.
+export const getHourlyTotals = async (userId, fromDate, toDate) =>
+  await WaterCollection.aggregate([
+    {
+      $match: {
+        userId,
+        drinkingTime: {
+          $gte: `${fromDate}T00:00:00`,
+          $lte: `${toDate}T23:59:59`,
+        },
+      },
+    },
+    {
+      $group: {
+        _id: { $substrBytes: ['$drinkingTime', 11, 2] },
+        total: { $sum: '$usedWater' },
+      },
+    },
+    { $project: { _id: 0, hour: '$_id', total: 1 } },
+  ]);

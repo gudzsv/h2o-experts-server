@@ -972,7 +972,8 @@
                         "monthAverage",
                         "completionRate",
                         "totalGoalDays",
-                        "days"
+                        "days",
+                        "timeOfDay"
                       ],
                       "properties": {
                         "dailyRequirement": {
@@ -1025,6 +1026,28 @@
                               "goalMet": {
                                 "type": "boolean"
                               }
+                            }
+                          }
+                        },
+                        "timeOfDay": {
+                          "type": "object",
+                          "description": "Ml drunk in each part of the day over the last 30 days, by the hour of drinkingTime: morning 05-11, afternoon 12-16, evening 17-21, night 22-04",
+                          "properties": {
+                            "morning": {
+                              "type": "number",
+                              "example": 18000
+                            },
+                            "afternoon": {
+                              "type": "number",
+                              "example": 21000
+                            },
+                            "evening": {
+                              "type": "number",
+                              "example": 12000
+                            },
+                            "night": {
+                              "type": "number",
+                              "example": 1500
                             }
                           }
                         }

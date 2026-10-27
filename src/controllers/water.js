@@ -3,12 +3,17 @@ import {
   addWater,
   deleteWater,
   getDailyTotals,
+  getHourlyTotals,
   getmonthWater,
   getWaterByDate,
   updateWater,
 } from '../services/water.js';
 import { HTTP_STATUSES } from '../constants/index.js';
-import { calculateWaterStats } from '../utils/waterStats.js';
+import {
+  calculateTimeOfDay,
+  calculateWaterStats,
+  getMonthStart,
+} from '../utils/waterStats.js';
 
 let STATUS_OK = HTTP_STATUSES.OK;
 const STATUS_CREATED = HTTP_STATUSES.CREATED;
@@ -86,12 +91,18 @@ export const statsWaterController = async (req, res) => {
   const { today } = req.query;
   const { _id: userId, dailyRequirement } = req.user;
 
-  const dailyTotals = await getDailyTotals(userId);
+  const [dailyTotals, hourlyTotals] = await Promise.all([
+    getDailyTotals(userId),
+    getHourlyTotals(userId, getMonthStart(today), today),
+  ]);
 
   res.status(STATUS_OK).json({
     status: STATUS_OK,
     message: 'Water stats calculated successfully',
-    data: calculateWaterStats(dailyTotals, { today, dailyRequirement }),
+    data: {
+      ...calculateWaterStats(dailyTotals, { today, dailyRequirement }),
+      timeOfDay: calculateTimeOfDay(hourlyTotals),
+    },
   });
 };
 
