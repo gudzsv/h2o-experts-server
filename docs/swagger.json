@@ -925,6 +925,125 @@
         }
       }
     },
+    "/water/stats": {
+      "get": {
+        "tags": [
+          "Water"
+        ],
+        "summary": "Get drinking statistics and streaks",
+        "operationId": "getWaterStats",
+        "description": "Streaks, averages and the share of days with the daily goal met. A day is the first 10 characters of drinkingTime, and the current dailyRequirement is used as the goal for every day.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "today",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            },
+            "example": "2024-07-20",
+            "description": "The user's local date, because the server does not know their time zone"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Water stats calculated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "required": [
+                        "dailyRequirement",
+                        "currentStreak",
+                        "bestStreak",
+                        "weekAverage",
+                        "monthAverage",
+                        "completionRate",
+                        "totalGoalDays",
+                        "days"
+                      ],
+                      "properties": {
+                        "dailyRequirement": {
+                          "type": "number",
+                          "example": 2000
+                        },
+                        "currentStreak": {
+                          "type": "integer",
+                          "description": "Days in a row with the goal met, up to today (or yesterday while today is not met yet)",
+                          "example": 4
+                        },
+                        "bestStreak": {
+                          "type": "integer",
+                          "example": 12
+                        },
+                        "weekAverage": {
+                          "type": "integer",
+                          "description": "Average ml per day over the last 7 days, empty days included",
+                          "example": 1650
+                        },
+                        "monthAverage": {
+                          "type": "integer",
+                          "description": "Average ml per day over the last 30 days, empty days included",
+                          "example": 1800
+                        },
+                        "completionRate": {
+                          "type": "integer",
+                          "description": "Percent of days with the goal met in the last 30 days, counted from the first recorded day",
+                          "example": 70
+                        },
+                        "totalGoalDays": {
+                          "type": "integer",
+                          "description": "All days with the goal met",
+                          "example": 21
+                        },
+                        "days": {
+                          "type": "array",
+                          "description": "The last 30 days, oldest first",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "date": {
+                                "type": "string",
+                                "example": "2024-07-20"
+                              },
+                              "total": {
+                                "type": "number",
+                                "example": 2100
+                              },
+                              "goalMet": {
+                                "type": "boolean"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          }
+        }
+      }
+    },
     "/water/{id}": {
       "patch": {
         "tags": [

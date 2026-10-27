@@ -57,6 +57,9 @@ paths:
   /water/month:
     get:
       $ref: '../swagger/paths/water/month/get.yaml'
+  /water/stats:
+    get:
+      $ref: '../swagger/paths/water/stats/get.yaml'
   /water/{id}:
     patch:
       $ref: '../swagger/paths/water/{id}/patch.yaml'
