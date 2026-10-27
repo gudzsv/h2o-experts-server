@@ -59,9 +59,18 @@ export const getDailyTotals = async (userId) =>
       $group: {
         _id: { $substrBytes: ['$drinkingTime', 0, 10] },
         total: { $sum: '$usedWater' },
+        // True when some water was drunk at 05:00-08:59.
+        early: {
+          $max: {
+            $and: [
+              { $gte: [{ $substrBytes: ['$drinkingTime', 11, 2] }, '05'] },
+              { $lt: [{ $substrBytes: ['$drinkingTime', 11, 2] }, '09'] },
+            ],
+          },
+        },
       },
     },
-    { $project: { _id: 0, date: '$_id', total: 1 } },
+    { $project: { _id: 0, date: '$_id', total: 1, early: 1 } },
   ]);
 
 // Water per hour of the day (characters 11-12 of drinkingTime) between two
