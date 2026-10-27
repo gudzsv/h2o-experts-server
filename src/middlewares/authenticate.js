@@ -3,13 +3,15 @@ import { HTTP_STATUSES } from '../constants/index.js';
 import { SessionCollection } from '../db/models/sessions.js';
 import { UserCollection } from '../db/models/users.js';
 
-const { NOT_FOUND, UNAUTHORIZED } = HTTP_STATUSES;
+const { UNAUTHORIZED } = HTTP_STATUSES;
 
 export const authenticate = async (req, res, next) => {
   const authHeader = req.get('Authorization');
 
   if (!authHeader) {
-    return next(createHttpError(NOT_FOUND, 'Authorization header not found'));
+    return next(
+      createHttpError(UNAUTHORIZED, 'Authorization header not found'),
+    );
   }
 
   const [bearer, token] = authHeader.split(' ');
@@ -24,7 +26,7 @@ export const authenticate = async (req, res, next) => {
     const session = await SessionCollection.findOne({ accessToken: token });
 
     if (!session) {
-      return next(createHttpError(NOT_FOUND, 'Session not found'));
+      return next(createHttpError(UNAUTHORIZED, 'Session not found'));
     }
 
     const isAccessTokenExpired =
@@ -37,7 +39,7 @@ export const authenticate = async (req, res, next) => {
     const user = await UserCollection.findById(session.userId);
 
     if (!user) {
-      return next(createHttpError(NOT_FOUND, 'User not found'));
+      return next(createHttpError(UNAUTHORIZED, 'User not found'));
     }
 
     req.user = user;
